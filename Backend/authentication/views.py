@@ -13,14 +13,15 @@ from .utils import generate_token_for_user
 
 @api_view(['POST'])
 def register(request: HttpRequest):
-    if User.objects.filter(email=request.data['username']).exists():
+    if User.objects.filter(username=request.data['username']).exists():
         return Response({'error': 'user exists', 'ok': False}, status=409)
     if request.data['password'] != request.data['cpassword']:
         return Response({'error': 'Passwords donot match', 'ok': False}, status=409)
     try:
         User(
-            email=request.data['username'],
-            full_name=request.data['full_name'],
+            username=request.data['username'],
+            first_name=request.data['first_name'],
+            last_name=request.data['last_name'],
             phone_number=request.data['phone_number'],
             password=bcrypt.hashpw(
                 request.data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
@@ -34,10 +35,11 @@ def register(request: HttpRequest):
 @api_view(['POST'])
 def login(request: HttpRequest):
     try:
-        user = User.objects.get(email=request.data['username'])
-        if not user.exists():
+        user = User.objects.get(username=request.data['username'])
+        print(user.password, request.data['password'])
+        if not user:
             return Response({'error': 'Invalid Credentials', 'ok': False})
-        if not bcrypt.checkpw(user.password.encode('utf-8'), request.data['password'].encode('utf-8')):
+        if not bcrypt.checkpw(request.data['password'].encode('utf-8'), user.password.encode('utf-8')):
             return Response({'error': 'Invalid credentials', 'ok': False})
 
     except ObjectDoesNotExist:
