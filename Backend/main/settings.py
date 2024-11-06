@@ -29,9 +29,11 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'authentication.apps.AuthenticationConfig',
     'quickserve.apps.QuickserveConfig',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -40,6 +42,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+CORS_ALLOW_ALL_ORIGINS = True  # This allows any origin to make requests
 
 ROOT_URLCONF = 'main.urls'
 AUTH_USER_MODEL = 'authentication.User'

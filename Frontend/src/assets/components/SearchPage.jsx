@@ -1,35 +1,43 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardContent, CardMedia, Grid, Typography, Button } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+} from "@mui/material";
 
-const ProductGrid = () => {
-  const [products, setProducts] = useState([]);
+const SearchPage = () => {
+  const [services, setServices] = useState([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchServices = async () => {
       try {
-        const response = await axios.get("https://jsonplaceholder.typicode.com/photos?_limit=8");
-        setProducts(response.data);
+        // Fetch data from the API
+        const response = await axios.get("http://127.0.0.1:8000/api/services/");
+        setServices(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    fetchProducts();
+    fetchServices();
   }, []);
 
   return (
     <div className="container my-5">
       <Typography variant="h3" color="warning" align="center" gutterBottom>
-        Our Home Products
+        Available Services
       </Typography>
       <Typography variant="h6" align="center" color="textSecondary" paragraph>
-        Discover our range of comfortable and stylish home furniture.
+        Explore the list of services available for your needs.
       </Typography>
 
       <Grid container spacing={4}>
-        {products.map((product) => (
-          <Grid item xs={12} key={product.id}>
+        {services.map((service) => (
+          <Grid item xs={12} key={service.phone_number}>
             <Card
               sx={{
                 display: "flex",
@@ -43,24 +51,38 @@ const ProductGrid = () => {
             >
               <CardMedia
                 component="img"
-                image={product.url}
-                alt={product.title}
+                image="https://med.gov.bz/wp-content/uploads/2020/08/dummy-profile-pic.jpg"
+                alt="service image"
                 sx={{ width: "40%", height: "250px", objectFit: "cover" }}
               />
-              <CardContent sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: "60%" }}>
+              <CardContent
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  width: "60%",
+                }}
+              >
                 <Typography variant="h6" fontWeight="bold">
-                  {product.title}
+                  {service.name}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  Sample description for the product.
+                  {`Phone: ${service.phone_number}`}
                 </Typography>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px" }}>
+                <Typography variant="body2" color="textSecondary">
+                  {`${service.address.building_name}, ${service.address.street}, ${service.address.area}, ${service.address.city}, ${service.address.state} - ${service.address.pincode}`}
+                </Typography>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginTop: "16px",
+                  }}
+                >
                   <Button variant="contained" color="warning" disabled>
                     View Details
                   </Button>
-                  <Typography variant="body1" color="primary" fontWeight="bold">
-                    Rs. 1000
-                  </Typography>
                 </div>
               </CardContent>
             </Card>
@@ -71,4 +93,4 @@ const ProductGrid = () => {
   );
 };
 
-export default ProductGrid;
+export default SearchPage;
