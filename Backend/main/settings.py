@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'authentication.apps.AuthenticationConfig',
-    'quickserve.apps.QuickserveConfig'
+    'quickserve.apps.QuickserveConfig',
 ]
 
 MIDDLEWARE = [
