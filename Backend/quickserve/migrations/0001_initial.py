@@ -34,31 +34,12 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-<<<<<<< HEAD
-            name='DaysAvailable',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('day', models.IntegerField(choices=[(1, 'Sunday'), (2, 'Monday'), (3, 'Tuesday'), (4, 'Wednesday'), (5, 'Thursday'), (6, 'Friday'), (7, 'Saturday')], unique=True)),
-            ],
-        ),
-        migrations.CreateModel(
             name='Service',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-=======
-            name='Service',
-            fields=[
->>>>>>> quickserve
                 ('name', models.CharField(max_length=99)),
                 ('phone_number', models.CharField(max_length=12)),
                 ('opening_time', models.TimeField()),
                 ('closing_time', models.TimeField()),
-<<<<<<< HEAD
-                ('address', models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, to='quickserve.address')),
-                ('category', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='quickserve.category')),
-                ('days_open', models.ManyToManyField(related_name='services', to='quickserve.daysavailable')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-=======
                 ('address', models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, primary_key=True, serialize=False, to='quickserve.address')),
                 ('category', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='quickserve.category')),
                 ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
@@ -75,7 +56,6 @@ class Migration(migrations.Migration):
                 ('friday', models.BooleanField(default=False)),
                 ('saturday', models.BooleanField(default=False)),
                 ('sunday', models.BooleanField(default=False)),
->>>>>>> quickserve
             ],
         ),
     ]
