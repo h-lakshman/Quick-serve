@@ -3,6 +3,7 @@ import Footer from "./assets/components/Footer";
 import CarouselComponent from "./assets/components/CarouselComponent";
 
 import "./App.css";
+import SearchPage from "./assets/components/SearchPage";
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
       
       <div className="main">
         <CarouselComponent />
-        
+        <SearchPage/>
       </div>
       <Footer />
     </>
