@@ -1,7 +1,7 @@
 import Navbar from "./assets/components/Navbar";
 import Footer from "./assets/components/Footer";
 import CarouselComponent from "./assets/components/CarouselComponent";
-import SearchPage from "./assets/components/SearchPage";
+import CardSection from "./assets/components/CardSection";
 import "./App.css";
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
       
       <div className="main">
         <CarouselComponent />
-        <SearchPage/>
+        <CardSection/>
       </div>
       <Footer />
     </>
