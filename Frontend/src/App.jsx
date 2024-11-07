@@ -1,12 +1,11 @@
 
 import "./App.css";
-import SearchPage from "./assets/components/SearchPage";
-import CardSection from "./assets/components/CardSection";
+import Home from "./assets/components/Home";
 
 function App() {
   return (
     <>
-      
+      <Home />
     </>
   );
 }

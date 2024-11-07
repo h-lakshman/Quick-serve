@@ -1,8 +1,9 @@
 import React from "react";
-import Navbar from "./assets/components/Navbar";
-import Footer from "./assets/components/Footer";
-import CarouselComponent from "./assets/components/CarouselComponent";
-import CardSection from "./assets/components/CardSection";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import CarouselComponent from "./CarouselComponent";
+import CardSection from "./CardSection";
+import SearchPage from './SearchPage';
 
 function Home() {
   return (
@@ -11,6 +12,7 @@ function Home() {
       <div className="main">
         <CarouselComponent />
         <CardSection />
+        <SearchPage />
       </div>
       <Footer />
     </>

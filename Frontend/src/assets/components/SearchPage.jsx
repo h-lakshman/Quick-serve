@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  Grid,
-  Typography,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  TextField,
-} from "@mui/material";
+import { Grid, Typography } from "@mui/material";
+import SearchBar from "./SearchBar"; // Import SearchBar component
+import ServiceCard from "./ServiceCard"; // Import ServiceCard component
 
 const SearchPage = () => {
   const [services, setServices] = useState([]);
@@ -44,70 +38,15 @@ const SearchPage = () => {
         Explore the list of services available for your needs.
       </Typography>
 
-      {/* Search input */}
-      <div className="input-box" style={{ textAlign: "center", marginBottom: "20px" }}>
-        <TextField
-          label="Search Services"
-          variant="outlined"
-          fullWidth
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search by name, phone, or address"
-        />
-      </div>
+      {/* Use the SearchBar component */}
+      <SearchBar query={query} setQuery={setQuery} />
 
       <Grid container spacing={4}>
         {filteredServices.length > 0 ? (
           filteredServices.map((service) => (
             <Grid item xs={12} key={service.phone_number}>
-              <Card
-                sx={{
-                  display: "flex",
-                  height: "auto",
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                  "&:hover": {
-                    transform: "scale(1.02)",
-                    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
-                  },
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  image="https://med.gov.bz/wp-content/uploads/2020/08/dummy-profile-pic.jpg"
-                  alt="service image"
-                  sx={{ width: "40%", height: "250px", objectFit: "cover" }}
-                />
-                <CardContent
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    width: "60%",
-                  }}
-                >
-                  <Typography variant="h6" fontWeight="bold">
-                    {service.name}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    {`Phone: ${service.phone_number}`}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    {`${service.address.building_name}, ${service.address.street}, ${service.address.area}, ${service.address.city}, ${service.address.state} - ${service.address.pincode}`}
-                  </Typography>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginTop: "16px",
-                    }}
-                  >
-                    <Button variant="contained" color="warning" disabled>
-                      View Details
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              {/* Pass dummy rating to ServiceCard */}
+              <ServiceCard service={{ ...service, rating: 4.5 }} />  {/* Example dummy rating of 4.5 */}
             </Grid>
           ))
         ) : (
