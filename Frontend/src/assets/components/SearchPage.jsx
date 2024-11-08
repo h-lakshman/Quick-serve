@@ -46,7 +46,7 @@ const SearchPage = () => {
           filteredServices.map((service) => (
             <Grid item xs={12} key={service.phone_number}>
               {/* Pass dummy rating to ServiceCard */}
-              <ServiceCard service={{ ...service, rating: 4.5 }} />  {/* Example dummy rating of 4.5 */}
+              <ServiceCard service={{ ...service, rating: 4}} />  {/* Example dummy rating of 4.5 */}
             </Grid>
           ))
         ) : (
