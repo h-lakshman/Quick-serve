@@ -30,7 +30,8 @@ class Service(models.Model):
     opening_time = models.TimeField()
     closing_time = models.TimeField()
     address = models.OneToOneField(
-        Address, on_delete=models.CASCADE, primary_key=True)
+        Address, on_delete=models.CASCADE)
+    available_all_hours = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return self.name
