@@ -28,7 +28,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ['name', 'phone_number', 'address', 'category',
+        fields = ['id', 'name', 'phone_number', 'address', 'category',
                   'daysavailable', 'opening_time', 'closing_time']
 
     def create(self, validated_data):
