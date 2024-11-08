@@ -1,11 +1,9 @@
 import React from "react";
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
-// Define the custom rating component with SVG stars
 const RatingIcon = ({ rating }) => {
-  const isFloat = rating => rating % 1 !== 0;
-  const numStars = Math.round(rating || 0); // Round the rating to a whole number
-  
+  const numStars = Math.round(rating || 0);
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
       {[...Array(5)].map((_, index) => (
@@ -19,12 +17,10 @@ const RatingIcon = ({ rating }) => {
         >
           <path
             fill={index < numStars ? "red" : "lightgray"}
-            opacity="1"
             d="M0 4C0 1.79086 1.79086 0 4 0H10V20H4C1.79086 20 0 18.2091 0 16V4Z"
           ></path>
           <path
             fill={index < numStars ? "red" : "lightgray"}
-            opacity="1"
             d="M20 4C20 1.79086 18.2091 0 16 0H10V20H16C18.2091 20 20 18.2091 20 16V4Z"
           ></path>
           <path
@@ -41,51 +37,52 @@ const RatingIcon = ({ rating }) => {
 
 const ServiceCard = ({ service }) => {
   return (
-    <Card
-      sx={{
-        display: "flex",
-        height: "auto",
-        transition: "transform 0.3s ease, box-shadow 0.3s ease",
-        borderRadius: "12px",
-        overflow: "hidden",
-        "&:hover": {
-          transform: "scale(1.02)",
-          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
-        },
-      }}
-    >
-      <CardMedia
-        component="img"
-        image={service.image || "https://med.gov.bz/wp-content/uploads/2020/08/dummy-profile-pic.jpg"}
-        alt="service image"
-        sx={{ padding: "20px", width: "25%", height: "250px", objectFit: "contain" }}
-      />
-      <CardContent
+    <Link to={`/service/${service.id}`} style={{ textDecoration: 'none' }}>
+      <Card
         sx={{
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          width: "60%",
-          padding: "24px",
+          height: "auto",
+          transition: "transform 0.3s ease, box-shadow 0.3s ease",
+          borderRadius: "12px",
+          overflow: "hidden",
+          "&:hover": {
+            transform: "scale(1.02)",
+            boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+          },
         }}
       >
-        <Typography variant="h4" fontWeight="600" sx={{textDecoration: "underline",}}>
-          {service.name}
-        </Typography>
-        <Typography variant="body1" sx={{ fontSize: "19px", fontWeight: 500, mb: 1 }}>
-          Phone: <span style={{ fontWeight: "bold", color: "#555" }}>{service.phone_number}</span>
-        </Typography>
-        <Typography variant="body1" sx={{ fontSize: "19px", fontWeight: 500, mb: 1 }}>
-          <strong>Address:</strong> {service.address.building_name}, {service.address.street}, {service.address.area}, {service.address.city} 
-          <br/>{service.address.state} - {service.address.pincode}
-        </Typography>
-
-        {/* Rating Display with custom SVG stars */}
-        <Typography variant="body1" sx={{ display: "flex", alignItems: "center", fontSize: "18px", fontWeight: 500 }}>
-          Rating:&nbsp; <RatingIcon rating={service.rating || 0} />
-        </Typography>
-      </CardContent>
-    </Card>
+        <CardMedia
+          component="img"
+          image={service.image || "https://med.gov.bz/wp-content/uploads/2020/08/dummy-profile-pic.jpg"}
+          alt="service image"
+          sx={{ padding: "20px", width: "25%", height: "250px", objectFit: "contain" }}
+        />
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            width: "60%",
+            padding: "24px",
+          }}
+        >
+          <Typography variant="h4" fontWeight="600" sx={{ textDecoration: "underline" }}>
+            {service.name}
+          </Typography>
+          <Typography variant="body1" sx={{ fontSize: "19px", fontWeight: 500, mb: 1 }}>
+            Phone: <span style={{ fontWeight: "bold", color: "#555" }}>{service.phone_number}</span>
+          </Typography>
+          <Typography variant="body1" sx={{ fontSize: "19px", fontWeight: 500, mb: 1 }}>
+            <strong>Address:</strong> {service.address.building_name}, {service.address.street}, {service.address.area}, {service.address.city}
+            <br />
+            {service.address.state} - {service.address.pincode}
+          </Typography>
+          <Typography variant="body1" sx={{ display: "flex", alignItems: "center", fontSize: "18px", fontWeight: 500 }}>
+            Rating:&nbsp; <RatingIcon rating={service.rating || 0} />
+          </Typography>
+        </CardContent>
+      </Card>
+    </Link>
   );
 };
 

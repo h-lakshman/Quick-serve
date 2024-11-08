@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import CarouselComponent from "./CarouselComponent";
 import CardSection from "./CardSection";
 import SearchPage from './SearchPage';
+import OneService from './OneService'
 
 function Home() {
   return (
@@ -13,6 +14,7 @@ function Home() {
         <CarouselComponent />
         <CardSection />
         <SearchPage />
+        
       </div>
       <Footer />
     </>
