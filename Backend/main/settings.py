@@ -31,7 +31,7 @@ INSTALLED_APPS = [
  
     'authentication.apps.AuthenticationConfig',
     'quickserve.apps.QuickserveConfig',
-    'corsheaders',
+    
 ]
  
 MIDDLEWARE = [
@@ -46,8 +46,6 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
-CORS_ALLOW_ALL_ORIGINS = True  # This allows any origin to make requests
-
  
 ROOT_URLCONF = 'main.urls'
 AUTH_USER_MODEL = 'authentication.User'
