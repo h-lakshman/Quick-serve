@@ -65,28 +65,3 @@ class ServiceSerializer(serializers.ModelSerializer):
         )
         days_available.save()
         return service
-# {
-#     "name": "Bella's Bakery",
-#     "phone_number": "9988776655",
-#     "address": {
-#         "building_name": "Sunrise Bakery",
-#         "street": "789 Maple Avenue",
-#         "area": "Old Town",
-#         "city": "Sunshine City",
-#         "state": "Sunny State",
-#         "pincode": "11223344"
-#     },
-#     "category": 2,
-#     "daysavailable": {
-#         "monday": false,
-#         "tuesday": true,
-#         "wednesday": true,
-#         "thursday": true,
-#         "friday": true,
-#         "saturday": true,
-#         "sunday": false
-#     },
-#     "opening_time": "08:00:00",
-#     "closing_time": "18:00:00"
-# }
- 
