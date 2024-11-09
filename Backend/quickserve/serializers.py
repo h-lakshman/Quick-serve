@@ -1,36 +1,36 @@
 from rest_framework import serializers
 from .models import Service, Category, DaysAvailable, Address
-
-
+ 
+ 
 class DaysOpenSerializer(serializers.ModelSerializer):
     class Meta:
         model = DaysAvailable
         fields = ('monday', 'tuesday', 'wednesday',
                   'thursday', 'friday', 'saturday', 'sunday')
-
-
+ 
+ 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('name',)
-
-
+ 
+ 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ('building_name', 'street', 'area',
                   'city', 'state', 'pincode',)
-
-
+ 
+ 
 class ServiceSerializer(serializers.ModelSerializer):
     daysavailable = DaysOpenSerializer()
     address = AddressSerializer()
-
+ 
     class Meta:
         model = Service
         fields = ['id', 'name', 'phone_number', 'address', 'category',
                   'daysavailable', 'opening_time', 'closing_time']
-
+ 
     def create(self, validated_data):
         address_data = validated_data['address']
         address = Address(
@@ -51,7 +51,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             address=address,
         )
         service.save()
-
+ 
         days_available_data = validated_data['daysavailable']
         days_available = DaysAvailable(
             service=service,
@@ -65,27 +65,3 @@ class ServiceSerializer(serializers.ModelSerializer):
         )
         days_available.save()
         return service
-# {
-#     "name": "Bella's Bakery",
-#     "phone_number": "9988776655",
-#     "address": {
-#         "building_name": "Sunrise Bakery",
-#         "street": "789 Maple Avenue",
-#         "area": "Old Town",
-#         "city": "Sunshine City",
-#         "state": "Sunny State",
-#         "pincode": "11223344"
-#     },
-#     "category": 2,
-#     "daysavailable": {
-#         "monday": false,
-#         "tuesday": true,
-#         "wednesday": true,
-#         "thursday": true,
-#         "friday": true,
-#         "saturday": true,
-#         "sunday": false
-#     },
-#     "opening_time": "08:00:00",
-#     "closing_time": "18:00:00"
-# }
