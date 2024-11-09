@@ -10,6 +10,7 @@ import {
   Box,
   Button,
 } from "@mui/material";
+import AddressCard from "./AddressCard";
 
 const RatingIcon = ({ rating, onRate }) => {
   const numStars = Math.round(rating || 0);
@@ -46,38 +47,6 @@ const RatingIcon = ({ rating, onRate }) => {
   );
 };
 
-const PhoneButton = ({ phoneNumber }) => {
-  return (
-    <Button
-      variant="contained"
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        padding: "10px 20px",
-        backgroundColor: "#4caf50",
-        "&:hover": {
-          backgroundColor: "#45a049",
-        },
-      }}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        width="24"
-        height="24"
-        style={{ marginRight: "8px" }}
-      >
-        <path
-          fill="white"
-          d="M19.57 16.53l-2.06-2.06c-.34-.34-.84-.34-1.18 0l-2.12 2.12c-.46-.17-.95-.35-1.41-.53-.35-.1-.75-.1-1.09 0l-3.21-1.29c-.14-.06-.27-.15-.39-.28l-3.54-3.54c-.13-.12-.22-.25-.28-.39l-1.29-3.21c-.1-.35-.1-.75 0-1.09.18-.46.36-.95.53-1.41L7.47 4.47c.34-.34.34-.84 0-1.18l-2.06-2.06c-.34-.34-.84-.34-1.18 0C1.23 2.43 0 4.03 0 5.65s1.23 3.22 2.65 4.65l3.54 3.54c2.28 2.28 5.89 2.67 8.5.74 1.74-1.52 2.67-4.23 2.06-6.32-.14-.54-.39-1.04-.74-1.39z"
-        />
-      </svg>
-      <Typography variant="body1" sx={{ color: "white" }}>
-        {phoneNumber}
-      </Typography>
-    </Button>
-  );
-};
 
 const OneService = () => {
   const { id } = useParams();
@@ -126,6 +95,7 @@ const OneService = () => {
   }
 
   return (
+    <>
     <Card
       sx={{
         display: "flex",
@@ -293,8 +263,12 @@ const OneService = () => {
         >
           Submit Rating
         </Button>
+        
       </Box>
     </Card>
+          <AddressCard service={service} />
+    </>
+    
   );
 };
 
