@@ -26,6 +26,9 @@ import {
   SET_CLOSE_AT,
   SET_CATEGORY,
   SET_SUCESS_PAGE,
+  SET_SEARCH_CATEGORY,
+  SET_SEARCH_LOCATION,
+  SET_SEARCH_RESULTS,
 } from "./actionTypes";
 
 const initialState = {
@@ -35,7 +38,10 @@ const initialState = {
   password: "",
   firstName: "",
   lastName: "",
-  phoneNumber: ",",
+  phoneNumber: "",
+  searchCategory: '',
+  searchLocation: '',
+  searchResults: '',
 };
 
 const intialCreateBuisness = {
@@ -77,6 +83,12 @@ export const reducer = (state = initialState, action) => {
       return { ...state, lastName: action.payload };
     case SET_PHONE_NUMBER:
       return { ...state, phone_number: action.payload };
+    case SET_SEARCH_CATEGORY:
+      return { ...state, searchCategory: action.payload };
+    case SET_SEARCH_LOCATION:
+      return { ...state, searchLocation: action.payload };
+    case SET_SEARCH_RESULTS:
+      return { ...state, searchResults: action.payload };
     default:
       return state;
   }

@@ -1,7 +1,7 @@
 import '../assets/styles/NavBar.css'
 import '@fontsource/roboto/700.css';
 
-import React from 'react'
+import React, { useState } from 'react'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -9,8 +9,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Logo from '../assets/images/logo.png'
 import darkLogo from '../assets/images/darkLogo.png'
 import { useSelector, useDispatch } from 'react-redux';
-import { setLoginForm, setSignUpForm } from '../redux/actions';
-import { useNavigate } from "react-router-dom";
+import { setLoginForm, setSearchCategory, setSearchLocation, setSearchResults, setSignUpForm } from '../redux/actions';
+import { useLocation, useNavigate } from "react-router-dom";
 
 const currencies = [
     {
@@ -31,31 +31,52 @@ const currencies = [
     },
 ];
 export default function NavBar() {
-    const url = String(location.href)
+    const url = useLocation();
+    const path = url.pathname
     let theme = 'white'
-    const routes = ['create-buisness']
-    for (let route in routes) {
-        url.includes(routes[route])
-        if (url.includes(routes[route])) {
+    const routes = ['create-buisness', 'search']
+    for (let route of routes) {
+        path.includes(route)
+        if (path.includes(route)) {
             theme = 'black'
             break
         }
     }
-
-
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const [searchButtonWork, setSearchButtonWork] = useState(false)
+    const searchLocation = useSelector((state) => state.reducer.searchLocation)
+    const searchCategory = useSelector((state) => state.reducer.searchCategory)
+    const searchResults = useSelector((state) => state.reducer.searchResults)
+    const searchSubmit = async () => {
+        if (searchButtonWork) {
+            const request = await
+                fetch(`http://127.0.0.1:8000/api/search/?&find_desc=${searchCategory}&find_loc=${searchLocation}`, {
+                    method: 'GET',
+                })
+            const response = await request.json()
+            navigate('/search',)
+            return
+        }
+        return
+    }
     return (
         <div className='nav' style={{
             paddingBottom: theme === 'white' ? '0' : '15px',
             boxShadow: theme === 'white' ? '' : '0 3px 0 0 rgba(0, 0, 0, 0.3)',
         }}>
             <div className='logo-search'>
-                <a href='/'>
+                <a href='/' style={{ height: '100%' }}>
                     <img className='logo' src={theme === 'white' ? Logo : darkLogo} alt="Quick Serve"
-                        width="150px" height="48px" style={{ zIndex: '1' }} />
+                        width="220px" height="70px" style={{ zIndex: '1', top: 3 }} />
                 </a>
                 <div className='search-item-fields'>
                     <div className='search-box-left'>
-                        <TextField id="outlined-search" label="search" type='search' variant='filled' size='small'
+                        <TextField id="outlined-search" label="search" type='search'
+                            variant='filled' size='small' onChange={(event) => {
+                                setSearchButtonWork(true)
+                                dispatch(setSearchCategory(event.target.value))
+                            }}
                             sx={{
                                 backgroundColor: 'white', height: '100%',
                             }} />
@@ -72,6 +93,10 @@ export default function NavBar() {
                             label="Location"
                             size="small"
                             variant="filled"
+                            onChange={(event) => {
+                                setSearchButtonWork(true)
+                                dispatch(setSearchLocation(event.target.value))
+                            }}
                             sx={{ top: '0', width: '25ch', height: '100%', backgroundColor: 'white', }}
 
                         >
@@ -84,10 +109,10 @@ export default function NavBar() {
                     </div>
                 </div>
 
-                <div className='search-icon-div'>
-                    <a className='search-icon' href='/'>
+                <div className='search-icon-div' onClick={searchSubmit}>
+                    <div className='search-icon' >
                         <img width="25" height="25" className='seach-image' src="https://img.icons8.com/ios-filled/50/FFFFFF/search--v1.png" alt="search--v1" />
-                    </a>
+                    </div>
                 </div>
             </div>
 
@@ -97,12 +122,13 @@ export default function NavBar() {
 }
 
 function TextButtons() {
-    const navigate = useNavigate()
-    const url = String(location.href)
+    const url = useLocation();
+    const path = url.pathname
     let theme = 'white'
-    const routes = ['create-buisness']
-    for (let route in routes) {
-        if (url.includes(routes[route])) {
+    const routes = ['create-buisness', 'search']
+    for (let route of routes) {
+
+        if (path.includes(route)) {
             theme = 'black'
             break
         }
@@ -115,7 +141,7 @@ function TextButtons() {
     const openSignUp = () => {
         dispatch(setSignUpForm(true))
     }
-
+    const navigate = useNavigate()
     return (
         <Stack direction="row" spacing={2}>
             <Button sx={{

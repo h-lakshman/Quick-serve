@@ -25,6 +25,9 @@ import {
   SET_CONTACT_EMAIL,
   SET_ADHAAR,
   SET_SUCESS_PAGE,
+  SET_SEARCH_CATEGORY,
+  SET_SEARCH_LOCATION,
+  SET_SEARCH_RESULTS,
 } from "./actionTypes";
 
 export const setLoginForm = (open) => ({
@@ -77,6 +80,10 @@ export const setThirdCreatePage = (open) => ({
 
 export const setFourthCreatePage = (open) => ({
   type: SET_FOURTH_CREATE_BUISNESS_PAGE,
+  payload: open,
+});
+export const setSuccessPage = (open) => ({
+  type: SET_SUCESS_PAGE,
   payload: open,
 });
 export const setBuisnessName = (buisnessName) => ({
@@ -151,7 +158,17 @@ export const setCategory = (category) => ({
   payload: category,
 });
 
-export const setSuccessPage = (open) => ({
-  type: SET_SUCESS_PAGE,
-  payload: open,
+export const setSearchCategory = (searchCatrgory) => ({
+  type: SET_SEARCH_CATEGORY,
+  payload: searchCatrgory,
+});
+
+export const setSearchLocation = (searchLocation) => ({
+  type: SET_SEARCH_LOCATION,
+  payload: searchLocation,
+});
+
+export const setSearchResults = (results) => ({
+  type: SET_SEARCH_RESULTS,
+  payload: results,
 });

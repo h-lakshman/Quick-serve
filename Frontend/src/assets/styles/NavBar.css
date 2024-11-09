@@ -13,14 +13,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
 }
 .search-item-fields {
   margin-top: 0;
-  padding-top: 0px;
+  top: -5;
   display: flex;
   height: fit-content;
   justify-content: space-around;
   margin-left: 20px;
+  margin-bottom: 5px;
 }
 
 .divider {
@@ -48,6 +50,10 @@
   align-items: center;
   justify-content: center;
   border: 0px;
+  margin-bottom: 5px;
+  :hover {
+    cursor: pointer;
+  }
 }
 .search-box-right {
   font-family: "Open Sans,Helvetica Neue,Helvetica,Arial,sans-serif";

@@ -31,3 +31,9 @@ export const SET_OPEN_AT = "SET_OPEN_AT";
 export const SET_CLOSE_AT = "SET_CLOSE_AT";
 
 export const SET_CATEGORY = "SET_CATEGORY";
+
+export const SET_SEARCH_CATEGORY = "SET_SEARCH_CATEGORY";
+export const SET_SEARCH_LOCATION = "SET_SEARCH_LOCATION";
+
+export const SET_SEARCH_RESULTS = "SET_SEARCH_RESULTS";
+

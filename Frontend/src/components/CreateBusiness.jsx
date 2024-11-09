@@ -35,7 +35,7 @@ import {
   setCloseAt,
   setStreet,
   setSuccessPage,
-} from "../redux/actions";
+} from "../redux/actions.js";
 import SignInForm from "./SignIn";
 import SignUpForm from "./SignUp";
 
