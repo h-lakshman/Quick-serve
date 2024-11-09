@@ -1,11 +1,13 @@
 .nav {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .logo {
   position: relative;
   z-index: 1;
   vertical-align: center;
+  padding-top: 2px;
 }
 .logo-search {
   display: flex;
@@ -13,9 +15,12 @@
   align-items: center;
 }
 .search-item-fields {
+  margin-top: 0;
+  padding-top: 0px;
   display: flex;
   height: fit-content;
   justify-content: space-around;
+  margin-left: 20px;
 }
 
 .divider {
@@ -34,7 +39,8 @@
   top: 0;
   fill: currentColor;
   width: 50px;
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 5px 5px 0;
+  padding: 11.7px 0;
 }
 .search-icon-div {
   height: 100%;

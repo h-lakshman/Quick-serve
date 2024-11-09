@@ -1,6 +1,6 @@
 import '../assets/styles/NavBar.css'
 import '@fontsource/roboto/700.css';
- 
+
 import React from 'react'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -11,7 +11,7 @@ import darkLogo from '../assets/images/darkLogo.png'
 import { useSelector, useDispatch } from 'react-redux';
 import { setLoginForm, setSignUpForm } from '../redux/actions';
 import { useNavigate } from "react-router-dom";
- 
+
 const currencies = [
     {
         value: 'USD',
@@ -41,8 +41,8 @@ export default function NavBar() {
             break
         }
     }
- 
- 
+
+
     return (
         <div className='nav' style={{
             paddingBottom: theme === 'white' ? '0' : '15px',
@@ -61,7 +61,7 @@ export default function NavBar() {
                             }} />
                     </div>
                     <div className='divider-container'>
- 
+
                         <div className='divider'>
                         </div>
                     </div>
@@ -73,7 +73,7 @@ export default function NavBar() {
                             size="small"
                             variant="filled"
                             sx={{ top: '0', width: '25ch', height: '100%', backgroundColor: 'white', }}
- 
+
                         >
                             {currencies.map((option) => (
                                 <MenuItem key={option.value} value={option.value}>
@@ -83,19 +83,19 @@ export default function NavBar() {
                         </TextField>
                     </div>
                 </div>
- 
+
                 <div className='search-icon-div'>
                     <a className='search-icon' href='/'>
                         <img width="25" height="25" className='seach-image' src="https://img.icons8.com/ios-filled/50/FFFFFF/search--v1.png" alt="search--v1" />
                     </a>
                 </div>
             </div>
- 
+
             <TextButtons theme={theme} />
         </div >
     )
 }
- 
+
 function TextButtons() {
     const navigate = useNavigate()
     const url = String(location.href)
@@ -110,12 +110,12 @@ function TextButtons() {
     const dispatch = useDispatch()
     const openSignIn = () => {
         dispatch(setLoginForm(true))
- 
+
     }
     const openSignUp = () => {
         dispatch(setSignUpForm(true))
     }
- 
+
     return (
         <Stack direction="row" spacing={2}>
             <Button sx={{
@@ -134,7 +134,7 @@ function TextButtons() {
                 } : {
                     backgroundColor: 'rgba(45, 46, 47, 0.368)',
                 }
-            }}>About us</Button>
+            }}> <p>About us</p></Button>
             <Button
                 onClick={() => navigate('/create-buisness')}
                 sx={{
@@ -153,7 +153,7 @@ function TextButtons() {
                     } : {
                         backgroundColor: 'rgba(45, 46, 47, 0.368)',
                     }
-                }}>List Buisness</Button>
+                }}><p>List Buisness </p></Button>
             <Button
                 onClick={openSignIn}
                 sx={{
@@ -165,14 +165,14 @@ function TextButtons() {
                     fontWeight: '740',
                     lineHeight: '24px',
                     width: '100px',
-                    height: '73%',
+                    height: '65%',
                     padding: '0px 5px',
                     ":hover": theme === 'white' ? {
                         backgroundColor: 'rgba(255, 255, 255, 0.368)',
                     } : {
                         backgroundColor: 'rgba(45, 46, 47, 0.368)',
                     }
-                }}>Login</Button>
+                }}> <p>Login</p> </Button>
             <Button
                 onClick={openSignUp}
                 sx={{
@@ -183,9 +183,9 @@ function TextButtons() {
                     width: '100px',
                     fontWeight: '740',
                     lineHeight: '24px',
-                    height: '73%',
+                    height: '65%',
                     padding: '0px 5px',
-                }}>Sign Up</Button>
+                }}> <p>Sign Up</p> </Button>
         </Stack >
     );
 }

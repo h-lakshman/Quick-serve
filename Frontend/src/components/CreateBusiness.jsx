@@ -1,5 +1,5 @@
 import "../assets/styles/CreateBuisness.css";
-import BuisnessDetail from "../assets/images/dummy_buisness.webp";
+import BuisnessDetail from "../assets/images/dummy_buisness.jpg";
 
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
