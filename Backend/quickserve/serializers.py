@@ -1,36 +1,36 @@
 from rest_framework import serializers
 from .models import Service, Category, DaysAvailable, Address
-
-
+ 
+ 
 class DaysOpenSerializer(serializers.ModelSerializer):
     class Meta:
         model = DaysAvailable
         fields = ('monday', 'tuesday', 'wednesday',
                   'thursday', 'friday', 'saturday', 'sunday')
-
-
+ 
+ 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('name',)
-
-
+ 
+ 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ('building_name', 'street', 'area',
                   'city', 'state', 'pincode',)
-
-
+ 
+ 
 class ServiceSerializer(serializers.ModelSerializer):
     daysavailable = DaysOpenSerializer()
     address = AddressSerializer()
-
+ 
     class Meta:
         model = Service
         fields = ['id', 'name', 'phone_number', 'address', 'category',
                   'daysavailable', 'opening_time', 'closing_time']
-
+ 
     def create(self, validated_data):
         address_data = validated_data['address']
         address = Address(
@@ -51,7 +51,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             address=address,
         )
         service.save()
-
+ 
         days_available_data = validated_data['daysavailable']
         days_available = DaysAvailable(
             service=service,
@@ -89,3 +89,4 @@ class ServiceSerializer(serializers.ModelSerializer):
 #     "opening_time": "08:00:00",
 #     "closing_time": "18:00:00"
 # }
+ 

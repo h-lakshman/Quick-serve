@@ -2,22 +2,22 @@ from pathlib import Path
 import datetime
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
+ 
+ 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
+ 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-#dl@)sj#7$n_!=0e#@qnjx5#j46*4cu(4sln()d8c&7wc=hz26'
-
+ 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+ 
 ALLOWED_HOSTS = []
-
-
+ 
+ 
 # Application definition
-
+ 
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,10 +27,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'corsheaders',
+ 
     'authentication.apps.AuthenticationConfig',
     'quickserve.apps.QuickserveConfig',
 ]
-
+ 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -39,11 +41,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
-
+ 
 ROOT_URLCONF = 'main.urls'
 AUTH_USER_MODEL = 'authentication.User'
-
+ 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -59,24 +63,24 @@ TEMPLATES = [
         },
     },
 ]
-
+ 
 WSGI_APPLICATION = 'main.wsgi.application'
-
-
+ 
+ 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+ 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
+ 
+ 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
+ 
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -91,13 +95,13 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+ 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
-
+ 
 SIMPLE_JWT = {
     'USER_ID_FIELD': 'id',
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(seconds=5),
@@ -106,22 +110,31 @@ SIMPLE_JWT = {
 }
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
-
+ 
 LANGUAGE_CODE = 'en-us'
-
+ 
 TIME_ZONE = 'UTC'
-
+ 
 USE_I18N = True
-
+ 
 USE_TZ = True
-
-
+ 
+ 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-
+ 
 STATIC_URL = 'static/'
-
+ 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
+ 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+]
+CORS_ALLOW_CREDENTIALS = True
+ 
+CORS_ALLOW_HEADERS = [
+    "token",
+    "content-type"
+]
