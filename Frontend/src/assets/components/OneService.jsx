@@ -11,6 +11,8 @@ import {
   Button,
 } from "@mui/material";
 import AddressCard from "./AddressCard";
+import ReviewForm from "./Review/ReviewForm";
+
 
 const RatingIcon = ({ rating, onRate }) => {
   const numStars = Math.round(rating || 0);
@@ -266,7 +268,8 @@ const OneService = () => {
         
       </Box>
     </Card>
-          <AddressCard service={service} />
+          <AddressCard service={service} /><br/>
+          <ReviewForm />
     </>
     
   );
