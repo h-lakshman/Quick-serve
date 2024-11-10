@@ -11,7 +11,8 @@ import darkLogo from '../assets/images/darkLogo.png'
 import { useSelector, useDispatch } from 'react-redux';
 import { setLoginForm, setSearchCategory, setSearchLocation, setSearchResults, setSignUpForm } from '../redux/actions';
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { cities } from '../assets/constansts/cities';
+import { Autocomplete } from '@mui/material';
 const currencies = [
     {
         value: 'USD',
@@ -48,6 +49,50 @@ export default function NavBar() {
     const searchLocation = useSelector((state) => state.reducer.searchLocation)
     const searchCategory = useSelector((state) => state.reducer.searchCategory)
     const searchResults = useSelector((state) => state.reducer.searchResults)
+    const getCurrentCity = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    const apiKey = 'b064301c2beb4e558573c1cc028a2436';
+                    const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}&language=en`;
+
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.results.length > 0) {
+                                // Get the city from the response
+                                const city = data.results[0].components.city || data.results[0].components.town || data.results[0].components.village;
+                                console.log(`Current city: ${city}`);
+                                dispatch(setSearchLocation(city))
+                            } else {
+                                console.log("City not found.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error fetching geolocation data:", error);
+                        });
+                },
+                (error) => {
+                    console.error("Error getting geolocation:", error);
+                }
+            );
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+        }
+    }
+
+    const handleLocationChange = (event, newValue) => {
+        if (newValue.value == 'current-location') {
+            getCurrentCity()
+        }
+        else {
+            dispatch(setSearchLocation(newValue.value))
+        }
+    }
+
     const searchSubmit = async () => {
         if (searchButtonWork) {
             const request = await
@@ -55,7 +100,9 @@ export default function NavBar() {
                     method: 'GET',
                 })
             const response = await request.json()
-            navigate('/search',)
+            console.log(response)
+            const data = { results: response, category: searchCategory, location: searchLocation }
+            navigate('/search', { state: data })
             return
         }
         return
@@ -87,25 +134,18 @@ export default function NavBar() {
                         </div>
                     </div>
                     <div className='search-box-right'>
-                        <TextField
-                            id="outlined-select-currency"
-                            select
-                            label="Location"
-                            size="small"
-                            variant="filled"
-                            onChange={(event) => {
-                                setSearchButtonWork(true)
-                                dispatch(setSearchLocation(event.target.value))
-                            }}
-                            sx={{ top: '0', width: '25ch', height: '100%', backgroundColor: 'white', }}
+                        <Autocomplete
+                            disablePortal
+                            onChange={handleLocationChange}
+                            options={cities}
+                            sx={{ width: '25ch', }}
+                            renderInput={(params) =>
+                                <TextField {...params} label="Location"
+                                    size="small"
+                                    variant="filled"
 
-                        >
-                            {currencies.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                                    sx={{ top: '0', width: '100%', height: '100%', backgroundColor: 'white', }} />}
+                        />
                     </div>
                 </div>
 
