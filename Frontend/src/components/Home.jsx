@@ -5,6 +5,7 @@ import SignUpForm from "./SignUp";
 import SearchIcon from "@mui/icons-material/Search";
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
+import CardSection from './CardSection';
 
 export default function Home() {
   const isLoginOpen = useSelector((state) => state.reducer.openLoginForm);
@@ -43,11 +44,12 @@ function Background({ background }) {
           letterSpacing: '-0.8px',
           lineHeight: '38px',
           color: 'rgba(0,0,0, 1)',
-          textAlign: 'center'
+          textAlign: 'center',
+          marginTop: '20px'
         }}>
           Categories
         </h1>
-
+        <CardSection />
       </div>
     </div>
   );
