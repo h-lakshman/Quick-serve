@@ -1,9 +1,27 @@
 import '../assets/styles/Search.css'
+import 'leaflet/dist/leaflet.css';
 
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, Link } from "react-router-dom";
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import L from 'leaflet';
+
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
+
+// Fix for default marker icons in Leaflet
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconRetinaUrl: iconRetina,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+L.Marker.prototype.options.icon = DefaultIcon;
 
 const RatingIcon = ({ rating }) => {
     const numStars = Math.round(rating || 0);
@@ -37,6 +55,7 @@ const RatingIcon = ({ rating }) => {
         </div>
     );
 };
+
 const ServiceCard = ({ service }) => {
     return (
         <Link to={`/service/${service.id}`} style={{ textDecoration: 'none' }}>
@@ -68,7 +87,7 @@ const ServiceCard = ({ service }) => {
                         padding: "24px",
                     }}
                 >
-                    <Typography variant="h4" fontWeight="600" sx={{ textDecoration: "underline" }}> 
+                    <Typography variant="h4" fontWeight="600" sx={{ textDecoration: "underline" }}>
                         {service.name}
                     </Typography>
                     <Typography variant="body1" sx={{ fontSize: "19px", fontWeight: 500, mb: 1 }}>
@@ -90,67 +109,152 @@ const ServiceCard = ({ service }) => {
 
 export default function Search() {
     const route = useLocation();
-    const data = route.state
-    const results = data.results;
-    const category = data.category;
-    const location = data.location;
+    const data = route.state;
+    const { results, category, location, lattitude, longtitude } = data;
+
+    const mapRef = useRef(null);
+    const markersRef = useRef([]);
+    const [mapInstance, setMapInstance] = useState(null);
+
+    // Initialize map
+    useEffect(() => {
+        if (!lattitude || !longtitude || mapInstance) return;
+
+        const map = L.map(mapRef.current).setView([lattitude, longtitude], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Add marker for user's location
+        L.marker([lattitude, longtitude])
+            .addTo(map)
+            .bindPopup('Your Location')
+            .openPopup();
+
+        setMapInstance(map);
+
+        // Cleanup
+        return () => {
+            map.remove();
+            setMapInstance(null);
+        };
+    }, [lattitude, longtitude]);
+
+    // Handle markers for services
+    useEffect(() => {
+        if (!mapInstance || !results.length) return;
+
+        // Clear existing markers
+        markersRef.current.forEach(marker => marker.remove());
+        markersRef.current = [];
+
+        // Create markers group for better performance
+        const markersGroup = L.featureGroup().addTo(mapInstance);
+
+        const geocodeAndAddMarker = async (service) => {
+            const { name, address } = service;
+            const searchAddress = `${address.building_name}, ${address.street}, ${address.area}, ${address.city}, ${address.state}, ${address.pincode}`;
+
+            try {
+                const response = await fetch(
+                    `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(searchAddress)}&key=b064301c2beb4e558573c1cc028a2436&language=en&pretty=1`
+                );
+                const data = await response.json();
+
+                if (data.results?.[0]?.geometry) {
+                    const { lat, lng } = data.results[0].geometry;
+                    const marker = L.marker([lat, lng])
+                        .bindPopup(`<b>${name}</b><br>${searchAddress}`)
+                        .addTo(markersGroup);
+
+                    markersRef.current.push(marker);
+                }
+            } catch (error) {
+                console.error("Error geocoding address:", error);
+            }
+        };
+
+        // Process all services
+        Promise.all(results.map(geocodeAndAddMarker))
+            .then(() => {
+                // Fit map bounds to show all markers
+                if (markersRef.current.length > 0) {
+                    mapInstance.fitBounds(markersGroup.getBounds(), { padding: [50, 50] });
+                }
+            });
+
+        return () => {
+            markersRef.current.forEach(marker => marker.remove());
+            markersRef.current = [];
+        };
+    }, [results, mapInstance]);
+
     return (
-        <div className='results'>
+        <div className='results' style={{ padding: '20px' }}>
             <div className='showResults'>
                 <div style={{
-                    fontFamily: "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+                    fontFamily: "'Open Sans', sans-serif",
                     fontSize: '12px',
                     fontWeight: '600',
-                    letterSpacing: '0px',
-                    lineHeight: '16px',
                     color: 'rgba(107, 109, 111, 1)',
-                    textAlign: 'left',
                     marginBottom: '2px',
                     marginTop: '20px'
-                }}>{category[0].toUpperCase() + category.slice(1)}</div>
+                }}>
+                    {category[0].toUpperCase() + category.slice(1)}
+                </div>
                 <h1 style={{
-                    fontFamily: "'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+                    fontFamily: "'Poppins', sans-serif",
                     fontSize: '24px',
                     fontWeight: '700',
                     letterSpacing: '-0.4px',
                     lineHeight: '32px',
-                    wordWrap: 'break-word',
-                    wordBreak: 'break-word',
-                    overflowWrap: 'break-word',
                     color: 'rgba(45, 46, 47, 1)',
-                    padding: '0',
-                    margin: '0'
-                }}>Best {category[0].toUpperCase() + category.slice(1)} Services Near {location}
+                    margin: '0 0 16px 0'
+                }}>
+                    Best {category[0].toUpperCase() + category.slice(1)} Services Near {location}
                 </h1>
+
+
+
                 <h2 style={{
-                    fontFamily: "'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+                    fontFamily: "'Poppins', sans-serif",
                     fontSize: '16px',
                     fontWeight: '700',
-                    letterSpacing: '-0.2px',
-                    lineHeight: '24px',
-                    wordWrap: 'break-word',
-                    wordBreak: 'break-word',
-                    overflowWrap: 'break-word',
-                    color: 'rgba(45, 46, 47, 1)'
+                    marginBottom: '20px'
                 }}>
                     All Results
                 </h2>
+
                 <Grid container spacing={4}>
                     {results.length > 0 ? (
                         results.map((service) => (
                             <Grid item xs={12} key={service.phone_number}>
-                                <ServiceCard service={{ ...service, rating: 4 }} />  {/*  dummy rating of 4.5 */}
+                                <ServiceCard service={{ ...service, rating: 4 }} />
                             </Grid>
                         ))
                     ) : (
-                        <Typography variant="body1" color="textSecondary" align="center">
-                            No services found.
+                        <Typography variant="body1" color="textSecondary" align="center" sx={{ py: 4 }}>
+                            No services found in this area.
                         </Typography>
                     )}
                 </Grid>
-            </div>
-            <div className='showMap'></div>
-        </div>
-    )
-}
 
+            </div>
+            <div
+                ref={mapRef}
+                style={{
+                    width: '100%',
+                    height: '80%',
+                    marginBottom: '20px',
+                    borderRadius: '12px',
+                    border: '1px solid #ddd',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    marginTop: '50px',
+                    marginLeft: '50px',
+
+                }}
+            />
+        </div>
+    );
+}

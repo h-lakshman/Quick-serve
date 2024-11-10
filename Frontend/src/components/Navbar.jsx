@@ -13,24 +13,7 @@ import { setLoginForm, setSearchCategory, setSearchLocation, setSearchResults, s
 import { useLocation, useNavigate } from "react-router-dom";
 import { cities } from '../assets/constansts/cities';
 import { Autocomplete } from '@mui/material';
-const currencies = [
-    {
-        value: 'USD',
-        label: '$',
-    },
-    {
-        value: 'EUR',
-        label: '€',
-    },
-    {
-        value: 'BTC',
-        label: '฿',
-    },
-    {
-        value: 'JPY',
-        label: '¥',
-    },
-];
+
 export default function NavBar() {
     const url = useLocation();
     const path = url.pathname
@@ -43,6 +26,10 @@ export default function NavBar() {
             break
         }
     }
+
+    const [lattitude, setLattitude] = useState('')
+    const [longtitude, setLongtitude] = useState('')
+
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [searchButtonWork, setSearchButtonWork] = useState(false)
@@ -55,8 +42,8 @@ export default function NavBar() {
                 (position) => {
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
-
-                    const apiKey = 'b064301c2beb4e558573c1cc028a2436';
+                    setLattitude(latitude)
+                    setLongtitude(longitude)
                     const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}&language=en`;
 
                     fetch(url)
@@ -89,7 +76,28 @@ export default function NavBar() {
             getCurrentCity()
         }
         else {
-            dispatch(setSearchLocation(newValue.value))
+            const city = newValue.value
+            const url = `https://api.opencagedata.com/geocode/v1/json?q=${city}&key=b064301c2beb4e558573c1cc028a2436&language=en&pretty=1`
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.results.length > 0) {
+                        const lattitude = data.results[0].geometry.lat;
+                        const longtitude = data.results[0].geometry.lng;
+
+                        console.log(lattitude, longtitude)
+                        setLattitude(lattitude)
+                        setLongtitude(longtitude)
+                        console.log(`Current city: ${city}`);
+                        dispatch(setSearchLocation(city))
+                    } else {
+                        console.log("City not found.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching geolocation data:", error);
+                });
+            dispatch(setSearchLocation(city))
         }
     }
 
@@ -101,7 +109,10 @@ export default function NavBar() {
                 })
             const response = await request.json()
             console.log(response)
-            const data = { results: response, category: searchCategory, location: searchLocation }
+            const data = {
+                results: response, category: searchCategory,
+                location: searchLocation, longtitude: longtitude, lattitude: lattitude
+            }
             navigate('/search', { state: data })
             return
         }
@@ -255,3 +266,4 @@ function TextButtons() {
         </Stack >
     );
 }
+const apiKey = 'b064301c2beb4e558573c1cc028a2436';
