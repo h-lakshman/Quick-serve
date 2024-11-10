@@ -1,5 +1,9 @@
 .results {
   display: flex;
   height: 100%;
-  
+}
+.showResults {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
 }
