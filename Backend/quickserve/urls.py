@@ -4,6 +4,7 @@ from . import views
  
 router = SimpleRouter()
 router.register('services', views.ServiceViewSet)
+router.register('reviews', views.ServiceReviewViewSet)
  
 urlpatterns = router.urls + [
     path('search/', views.search, name='search')

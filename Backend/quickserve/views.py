@@ -4,8 +4,9 @@ from rest_framework.response import Response
 from rest_framework.request import HttpRequest
 from rest_framework.decorators import api_view
 
-from .models import Service
-from .serializers import ServiceSerializer
+from rest_framework.permissions import IsAuthenticated
+from .models import Service, ServiceReview
+from .serializers import ServiceSerializer, ServiceReviewSerializer
 
 
 class ServiceViewSet(viewsets.ModelViewSet):
@@ -52,3 +53,26 @@ def search(request):
 
     serializer = ServiceSerializer(queryset, many=True)
     return Response(serializer.data, status=200)
+
+
+class ServiceReviewViewSet(viewsets.ModelViewSet):
+    queryset = ServiceReview.objects.all()
+    serializer_class = ServiceReviewSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        service = Service.objects.get(id=request.data['service'])
+        rating_value = request.data['rating']
+        review_text = request.data['review_text']
+        
+        existing_review = ServiceReview.objects.filter(user=request.user, service=service)
+        if existing_review.exists():
+            return Response({"detail": "You have already reviewed this service."}, status=400)
+
+        review = ServiceReview.objects.create(
+            service=service,
+            user=request.user,
+            rating=rating_value,
+            review_text=review_text
+        )
+        return Response(ServiceReviewSerializer(review).data, status=201)

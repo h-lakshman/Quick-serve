@@ -47,3 +47,21 @@ class DaysAvailable(models.Model):
     friday = models.BooleanField(default=False)
     saturday = models.BooleanField(default=False)
     sunday = models.BooleanField(default=False)
+
+
+class ServiceReview(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name="reviews")
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    rating = models.PositiveIntegerField()
+    review_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_average_rating(self):
+        reviews = ServiceReview.objects.filter(service=self.service)
+        if reviews.exists():
+            total_rating = sum([review.rating for review in reviews])
+            return total_rating / reviews.count()
+        return None
+
+    def __str__(self):
+        return f"Review for {self.service.name} by {self.user.username}"

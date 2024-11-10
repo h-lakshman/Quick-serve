@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Service, Category, DaysAvailable, Address
+from .models import Service, Category, DaysAvailable, Address, ServiceReview
  
  
 class DaysOpenSerializer(serializers.ModelSerializer):
@@ -65,3 +65,8 @@ class ServiceSerializer(serializers.ModelSerializer):
         )
         days_available.save()
         return service
+
+class ServiceReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceReview
+        fields = ['service', 'user', 'rating', 'review_text', 'created_at']
