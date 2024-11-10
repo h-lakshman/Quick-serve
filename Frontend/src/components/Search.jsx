@@ -116,7 +116,6 @@ export default function Search() {
     const markersRef = useRef([]);
     const [mapInstance, setMapInstance] = useState(null);
 
-    // Initialize map
     useEffect(() => {
         if (!lattitude || !longtitude || mapInstance) return;
 
@@ -126,7 +125,6 @@ export default function Search() {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Add marker for user's location
         L.marker([lattitude, longtitude])
             .addTo(map)
             .bindPopup('Your Location')
@@ -134,22 +132,18 @@ export default function Search() {
 
         setMapInstance(map);
 
-        // Cleanup
         return () => {
             map.remove();
             setMapInstance(null);
         };
     }, [lattitude, longtitude]);
 
-    // Handle markers for services
     useEffect(() => {
         if (!mapInstance || !results.length) return;
 
-        // Clear existing markers
         markersRef.current.forEach(marker => marker.remove());
         markersRef.current = [];
 
-        // Create markers group for better performance
         const markersGroup = L.featureGroup().addTo(mapInstance);
 
         const geocodeAndAddMarker = async (service) => {
@@ -175,10 +169,8 @@ export default function Search() {
             }
         };
 
-        // Process all services
         Promise.all(results.map(geocodeAndAddMarker))
             .then(() => {
-                // Fit map bounds to show all markers
                 if (markersRef.current.length > 0) {
                     mapInstance.fitBounds(markersGroup.getBounds(), { padding: [50, 50] });
                 }
