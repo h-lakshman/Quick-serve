@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import CardSection from './CardSection';
+import Footer from './Footer';
 
 export default function Home() {
   const isLoginOpen = useSelector((state) => state.reducer.openLoginForm);
@@ -50,6 +51,7 @@ function Background({ background }) {
           Categories
         </h1>
         <CardSection />
+        <Footer />
       </div>
     </div>
   );
