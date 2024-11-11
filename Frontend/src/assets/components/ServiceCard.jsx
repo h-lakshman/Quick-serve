@@ -38,7 +38,7 @@ const RatingIcon = ({ rating }) => {
 
 const ServiceCard = ({ service }) => {
   return (
-    <Link to={`/service/${service.id}`} style={{ textDecoration: 'none' }}>
+    <Link to={`/service/${service.id}`} style={{ textDecoration: "none" }}>
       <Card
         sx={{
           display: "flex",
@@ -54,9 +54,17 @@ const ServiceCard = ({ service }) => {
       >
         <CardMedia
           component="img"
-          image={service.image || "https://med.gov.bz/wp-content/uploads/2020/08/dummy-profile-pic.jpg"}
+          image={
+            service.image ||
+            "https://med.gov.bz/wp-content/uploads/2020/08/dummy-profile-pic.jpg"
+          }
           alt="service image"
-          sx={{ padding: "20px", width: "25%", height: "250px", objectFit: "contain" }}
+          sx={{
+            padding: "20px",
+            width: "25%",
+            height: "250px",
+            objectFit: "contain",
+          }}
         />
         <CardContent
           sx={{
@@ -68,24 +76,49 @@ const ServiceCard = ({ service }) => {
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Typography variant="h4" fontWeight="600" sx={{ textDecoration: "underline", marginRight: "8px" }}>
+            <Typography
+              variant="h4"
+              fontWeight="600"
+              sx={{ textDecoration: "underline", marginRight: "8px" }}
+            >
               {service.name}
-            </Typography>&nbsp;&nbsp;
+            </Typography>
+            &nbsp;&nbsp;
             <img
               src="https://cdn-icons-png.flaticon.com/128/11648/11648438.png"
               alt="Verified"
               style={{ width: "20px", height: "20px", marginBottom: "4px" }}
-            /><Typography sx={{fontWeight:'bold'}}>Verified</Typography>
+            />
+            <Typography sx={{ fontWeight: "bold" }}>Verified</Typography>
           </Box>
-          <Typography variant="body1" sx={{ fontSize: "19px", fontWeight: 500, mb: 1 }}>
-            Phone: <span style={{ fontWeight: "bold", color: "#555" }}>{service.phone_number}</span>
+          <Typography
+            variant="body1"
+            sx={{ fontSize: "19px", fontWeight: 500, mb: 1 }}
+          >
+            Phone:{" "}
+            <span style={{ fontWeight: "bold", color: "#555" }}>
+              {service.phone_number}
+            </span>
           </Typography>
-          <Typography variant="body1" sx={{ fontSize: "19px", fontWeight: 500, mb: 1 }}>
-            <strong>Address:</strong> {service.address.building_name}, {service.address.street}, {service.address.area}, {service.address.city}
+          <Typography
+            variant="body1"
+            sx={{ fontSize: "19px", fontWeight: 500, mb: 1 }}
+          >
+            <strong>Address:</strong> {service.address.building_name},{" "}
+            {service.address.street}, {service.address.area},{" "}
+            {service.address.city}
             <br />
             {service.address.state} - {service.address.pincode}
           </Typography>
-          <Typography variant="body1" sx={{ display: "flex", alignItems: "center", fontSize: "18px", fontWeight: 500 }}>
+          <Typography
+            variant="body1"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              fontSize: "18px",
+              fontWeight: 500,
+            }}
+          >
             Rating:&nbsp; <RatingIcon rating={service.rating || 0} />
           </Typography>
         </CardContent>

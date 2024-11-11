@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import AddressCard from "./AddressCard";
 import ReviewForm from "./Review/ReviewForm";
+import Service from "./Service/Service";
+import Navbar from "./Navbar";
 
 
 const RatingIcon = ({ rating, onRate }) => {
@@ -55,7 +57,7 @@ const OneService = () => {
   const [service, setService] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [userRating, setUserRating] = useState(4); // Default user rating
+  const [userRating, setUserRating] = useState(0); // Default user rating
 
   useEffect(() => {
     const fetchService = async () => {
@@ -98,6 +100,8 @@ const OneService = () => {
 
   return (
     <>
+    <Navbar/>
+    <Service/>
     <Card
       sx={{
         display: "flex",
