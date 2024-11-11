@@ -12,14 +12,14 @@ class DaysOpenSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('name',)
+        fields = ('id', 'name')  # Include ID so it can be referenced directly
 
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ('building_name', 'street', 'area',
-                  'city', 'state', 'pincode',)
+                  'city', 'state', 'pincode')
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -28,53 +28,38 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ('service', 'user', 'review',
                   'rating', 'created_at', 'modified_at')
 
-        def validate_rating(self, value):
-            if value < 1 or value > 5:
-                raise serializers.ValidationError(
-                    "Rating must be between 1 and 5.")
-            return value
+    def validate_rating(self, value):
+        if value < 1 or value > 5:
+            raise serializers.ValidationError(
+                "Rating must be between 1 and 5.")
+        return value
 
 
 class ServiceSerializer(serializers.ModelSerializer):
     daysavailable = DaysOpenSerializer()
     address = AddressSerializer()
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all())
 
     class Meta:
         model = Service
-        fields = ['id', 'name', 'phone_number', 'address', 'category',
-                  'daysavailable', 'opening_time', 'closing_time']
+        fields = ['id', 'name', 'phone_number', 'address',
+                  'category', 'daysavailable', 'opening_time', 'closing_time']
 
     def create(self, validated_data):
-        address_data = validated_data['address']
-        address = Address(
-            building_name=address_data.get('building_name', None),
-            street=address_data.get('street', None),
-            area=address_data.get('area', None),
-            city=address_data.get('city', None),
-            state=address_data.get('state', None),
-            pincode=address_data.get('pincode', None),
-        )
-        address.save()
-        service = Service(
-            name=validated_data['name'],
-            phone_number=validated_data['phone_number'],
-            category=validated_data['category'],
-            opening_time=validated_data['opening_time'],
-            closing_time=validated_data['closing_time'],
-            address=address,
-        )
-        service.save()
+        address_data = validated_data.pop('address')
+        address = Address.objects.create(**address_data)
 
-        days_available_data = validated_data['daysavailable']
-        days_available = DaysAvailable(
-            service=service,
-            monday=days_available_data.get('monday', False),
-            tuesday=days_available_data.get('tuesday', False),
-            wednesday=days_available_data.get('wednesday', False),
-            thursday=days_available_data.get('thursday', False),
-            friday=days_available_data.get('friday', False),
-            saturday=days_available_data.get('saturday', False),
-            sunday=days_available_data.get('sunday', False),
+        days_available_data = validated_data.pop('daysavailable')
+
+        service = Service.objects.create(
+            address=address,
+            **validated_data
         )
-        days_available.save()
+
+        DaysAvailable.objects.create(
+            service=service,
+            **days_available_data
+        )
+
         return service
