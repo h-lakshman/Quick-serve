@@ -30,6 +30,7 @@ import {
   SET_SEARCH_RESULTS,
   BUISNESS_CREATED_SUCCESSFULLY,
   SET_BUILDING_NAME,
+  SET_IS_AUTHENTICATED,
 } from "./actionTypes";
 
 export const setLoginForm = (open) => ({
@@ -178,4 +179,9 @@ export const setSearchResults = (results) => ({
 export const buisnessCreated = (ok) => ({
   type: BUISNESS_CREATED_SUCCESSFULLY,
   payload: ok,
+});
+
+export const setAuthenticated = (authenticated) => ({
+  type: SET_IS_AUTHENTICATED,
+  payload: authenticated,
 });

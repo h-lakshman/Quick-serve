@@ -1,7 +1,7 @@
 import Dialog from "@mui/material/Dialog";
 import { DialogTitle, DialogContent, TextField, Button } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { setEmail, setLoginForm, setPassword } from "../redux/actions.js";
+import { setAuthenticated, setEmail, setLoginForm, setPassword } from "../redux/actions.js";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import GoogleButton from "react-google-button";
 
@@ -33,9 +33,15 @@ export default function SignInForm() {
       }),
     });
     const response = await request.json();
+    if (response.ok) {
+      dispatch(setAuthenticated(true))
+      localStorage.setItem('token', response.token)
 
+      handleClose()
+    }
     console.log(response);
   };
+
   return (
     <Dialog open={isLogin} onClose={handleClose}>
       <DialogContent

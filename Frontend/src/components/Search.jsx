@@ -3,15 +3,13 @@ import 'leaflet/dist/leaflet.css';
 
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, Link } from "react-router-dom";
-import { Card, CardMedia, CardContent, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { Card, CardMedia, CardContent, Typography, Box, Grid } from "@mui/material";
 import L from 'leaflet';
 
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
 
-// Fix for default marker icons in Leaflet
 let DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
@@ -56,7 +54,16 @@ const RatingIcon = ({ rating }) => {
     );
 };
 
+// Assuming the results contain reviews for each service.
+const calculateAverageRating = (reviews) => {
+    if (!reviews || reviews.length === 0) return 0;
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    return totalRating / reviews.length;
+};
+
 const ServiceCard = ({ service }) => {
+    // Calculate the average rating if it's not provided
+    const averageRating = calculateAverageRating(service.reviews);
     return (
         <Link to={`/service/${service.id}`} style={{ textDecoration: 'none' }}>
             <Card
@@ -99,7 +106,7 @@ const ServiceCard = ({ service }) => {
                         {service.address.state} - {service.address.pincode}
                     </Typography>
                     <Typography variant="body1" sx={{ display: "flex", alignItems: "center", fontSize: "18px", fontWeight: 500 }}>
-                        Rating:&nbsp; <RatingIcon rating={service.rating || 0} />
+                        Rating:&nbsp; <RatingIcon rating={averageRating || 0} />
                     </Typography>
                 </CardContent>
             </Card>
@@ -107,6 +114,7 @@ const ServiceCard = ({ service }) => {
     );
 };
 
+// Usage in the Search component
 export default function Search() {
     const route = useLocation();
     const data = route.state;
@@ -183,8 +191,8 @@ export default function Search() {
     }, [results, mapInstance]);
 
     return (
-        <div className='results' style={{ padding: '20px' }}>
-            <div className='showResults'>
+        <Box sx={{ display: 'flex', height: '100vh', marginTop: '110px' }}>
+            <Box sx={{ flex: '2', padding: '20px', overflow: 'auto' }}>
                 <div style={{
                     fontFamily: "'Open Sans', sans-serif",
                     fontSize: '12px',
@@ -195,34 +203,19 @@ export default function Search() {
                 }}>
                     {category[0].toUpperCase() + category.slice(1)}
                 </div>
-                <h1 style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: '24px',
-                    fontWeight: '700',
-                    letterSpacing: '-0.4px',
-                    lineHeight: '32px',
-                    color: 'rgba(45, 46, 47, 1)',
-                    margin: '0 0 16px 0'
-                }}>
+                <Typography variant="h4" fontWeight="700" sx={{ marginBottom: '16px' }}>
                     Best {category[0].toUpperCase() + category.slice(1)} Services Near {location}
-                </h1>
+                </Typography>
 
-
-
-                <h2 style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: '16px',
-                    fontWeight: '700',
-                    marginBottom: '20px'
-                }}>
+                <Typography variant="h6" fontWeight="700" sx={{ marginBottom: '20px' }}>
                     All Results
-                </h2>
+                </Typography>
 
                 <Grid container spacing={4}>
                     {results.length > 0 ? (
                         results.map((service) => (
                             <Grid item xs={12} key={service.phone_number}>
-                                <ServiceCard service={{ ...service, rating: 4 }} />
+                                <ServiceCard service={service} />
                             </Grid>
                         ))
                     ) : (
@@ -231,22 +224,17 @@ export default function Search() {
                         </Typography>
                     )}
                 </Grid>
-
-            </div>
-            <div
+            </Box>
+            <Box
                 ref={mapRef}
-                style={{
+                sx={{
+                    flex: '1',
                     width: '100%',
-                    height: '80vh',
-                    marginBottom: '20px',
-                    borderRadius: '12px',
-                    border: '1px solid #ddd',
+                    height: '100%',
+                    borderLeft: '1px solid #ddd',
                     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                    marginTop: '50px',
-                    marginLeft: '50px',
-
                 }}
             />
-        </div>
+        </Box>
     );
 }

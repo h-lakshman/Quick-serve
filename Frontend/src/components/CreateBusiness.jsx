@@ -555,6 +555,7 @@ function FourthPage({ className }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'token': localStorage.getItem('token')
         },
         body: JSON.stringify({
           name: buisnessName,
@@ -574,7 +575,7 @@ function FourthPage({ className }) {
         })
       });
       const response = request.json();
-      console.log(response) 
+      console.log(response)
       if (response) {
         dispatch(buisnessCreated(true))
         dispatch(setFourthCreatePage(false));

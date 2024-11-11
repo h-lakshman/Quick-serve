@@ -31,6 +31,7 @@ import {
   SET_SEARCH_LOCATION,
   SET_SEARCH_RESULTS,
   BUISNESS_CREATED_SUCCESSFULLY,
+  SET_IS_AUTHENTICATED,
 } from "./actionTypes";
 
 const initialState = {
@@ -44,6 +45,7 @@ const initialState = {
   searchCategory: '',
   searchLocation: '',
   searchResults: '',
+  isAuthenticated: false,
 };
 
 const intialCreateBuisness = {
@@ -92,6 +94,9 @@ export const reducer = (state = initialState, action) => {
       return { ...state, searchLocation: action.payload };
     case SET_SEARCH_RESULTS:
       return { ...state, searchResults: action.payload };
+    case SET_IS_AUTHENTICATED:
+      return { ...state, isAuthenticated: action.payload };
+
     default:
       return state;
   }
