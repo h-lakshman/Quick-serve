@@ -46,7 +46,7 @@ class Service(models.Model):
 
 class DaysAvailable(models.Model):
     service = models.OneToOneField(
-        Service, on_delete=models.CASCADE, primary_key=True)
+        Service, on_delete=models.CASCADE, primary_key=True, related_name='daysavailable')
     monday = models.BooleanField(default=False)
     tuesday = models.BooleanField(default=False)
     wednesday = models.BooleanField(default=False)
