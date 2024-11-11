@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.request import HttpRequest
 from rest_framework.decorators import api_view
+from rest_framework.decorators import action
 
 from .models import Service
 from .serializers import ServiceSerializer
@@ -12,10 +13,16 @@ class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.serializer_class(instance)
-        return Response(serializer.data, status=200)
+    @action(detail=False, methods=['get'], url_path='(?P<slug>[^/]+)')
+    def get_service_by_name(self, request, slug=None):
+        try:
+            service = Service.objects.get(slug=slug)
+            serializer = self.get_serializer(service)
+            return Response(serializer.data, status=200)
+        except Service.DoesNotExist:
+            return Response({
+                'detail': 'Service doesnot exists'
+            }, status=400)
 
 
 @api_view(['GET'])

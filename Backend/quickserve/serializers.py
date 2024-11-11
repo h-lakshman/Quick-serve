@@ -1,36 +1,49 @@
 from rest_framework import serializers
-from .models import Service, Category, DaysAvailable, Address
- 
- 
+from .models import Service, Category, DaysAvailable, Address, Review
+
+
 class DaysOpenSerializer(serializers.ModelSerializer):
     class Meta:
         model = DaysAvailable
         fields = ('monday', 'tuesday', 'wednesday',
                   'thursday', 'friday', 'saturday', 'sunday')
- 
- 
+
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('name',)
- 
- 
+
+
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ('building_name', 'street', 'area',
                   'city', 'state', 'pincode',)
- 
- 
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ('service', 'user', 'review',
+                  'rating', 'created_at', 'modified_at')
+
+        def validate_rating(self, value):
+            if value < 1 or value > 5:
+                raise serializers.ValidationError(
+                    "Rating must be between 1 and 5.")
+            return value
+
+
 class ServiceSerializer(serializers.ModelSerializer):
     daysavailable = DaysOpenSerializer()
     address = AddressSerializer()
- 
+
     class Meta:
         model = Service
         fields = ['id', 'name', 'phone_number', 'address', 'category',
                   'daysavailable', 'opening_time', 'closing_time']
- 
+
     def create(self, validated_data):
         address_data = validated_data['address']
         address = Address(
@@ -51,7 +64,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             address=address,
         )
         service.save()
- 
+
         days_available_data = validated_data['daysavailable']
         days_available = DaysAvailable(
             service=service,
