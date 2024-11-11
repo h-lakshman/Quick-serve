@@ -1,0 +1,65 @@
+{
+    "reviews": [
+      {
+        "id": 1,
+        "userName": "Alice",
+        "rating": 4,
+        "reviewText": "Great service, highly recommended!"
+      },
+      {
+        "id": 2,
+        "userName": "Bob",
+        "rating": 5,
+        "reviewText": "Excellent experience, will use again!"
+      },
+      {
+        "id": 3,
+        "userName": "Charlie",
+        "rating": 3,
+        "reviewText": "Good service, but there's room for improvement."
+      },
+      {
+        "id": 4,
+        "userName": "Diana",
+        "rating": 5,
+        "reviewText": "Amazing service! Very professional."
+      },
+      {
+        "id": 5,
+        "userName": "Eve",
+        "rating": 2,
+        "reviewText": "Not satisfied, expected better."
+      },
+      {
+        "id": 6,
+        "userName": "Frank",
+        "rating": 4,
+        "reviewText": "Good job, reasonably priced."
+      },
+      {
+        "id": 7,
+        "userName": "Grace",
+        "rating": 5,
+        "reviewText": "Outstanding quality and attention to detail!"
+      },
+      {
+        "id": 8,
+        "userName": "Hank",
+        "rating": 3,
+        "reviewText": "Service was okay, but could improve."
+      },
+      {
+        "id": 9,
+        "userName": "Ivy",
+        "rating": 4,
+        "reviewText": "Very good experience, but there were minor delays."
+      },
+      {
+        "id": 10,
+        "userName": "Jack",
+        "rating": 5,
+        "reviewText": "Perfect! Couldn't have asked for better service."
+      }
+    ]
+  }
+  

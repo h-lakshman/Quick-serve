@@ -4,6 +4,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import { Link } from "react-router-dom";
 
 // Reusable FooterLink Component
 const FooterLink = ({ children }) => {
@@ -37,13 +38,16 @@ const Footer = () => {
           <Box sx={{ paddingLeft: "50px" }}>
             <Typography variant="h6" fontWeight="bold" sx={{ pb: "10px" }}>
               Quick Links
-            </Typography>
-            <FooterLink>About Us</FooterLink>
+            </Typography><Link to='/about' style={{ textDecoration: 'none', color: 'inherit' }}>
+            <FooterLink>About Us</FooterLink></Link>
             <FooterLink>Advertise</FooterLink>
             <FooterLink>Investor Relations</FooterLink>
             <FooterLink>Media</FooterLink>
             <FooterLink>We're Hiring</FooterLink>
-            <FooterLink>Testimonials</FooterLink>
+            <Link to='/testimonial' style={{ textDecoration: 'none', color: 'inherit' }}>
+            <FooterLink>
+              Testimonials</FooterLink>
+              </Link>
           </Box>
         </Grid>
 
@@ -71,7 +75,6 @@ const Footer = () => {
             <FooterLink>Restaurants</FooterLink>
             <FooterLink>Doctors</FooterLink>
             <FooterLink>Hospitals</FooterLink>
-            <FooterLink>Schools</FooterLink>
             <FooterLink>Colleges</FooterLink>
             <FooterLink>AC Repair</FooterLink>
             <FooterLink>Car Services</FooterLink>
@@ -95,7 +98,7 @@ const Footer = () => {
       </Grid>
 
       {/* Logo in the center */}
-{/* <Box textAlign="center" mb={4} sx={{pt:'20px'}}>
+<Box textAlign="center" mb={4} sx={{pt:'20px'}}>
   <img 
     src="nobg1.PNG" 
     alt="Your Logo" 
@@ -105,8 +108,7 @@ const Footer = () => {
       maxWidth: '100%', // Ensures the logo doesn't overflow its container
     }} 
   /> 
-</Box> */}
-
+</Box>
       {/* Social Media Section */}
       <Grid container justifyContent="center" mt={2}>
         <Grid item xs={12} textAlign="center" >
