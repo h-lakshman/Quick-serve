@@ -5,6 +5,7 @@ import Home from "./components/Home.jsx";
 import CreateBuisness from "./components/CreateBusiness.jsx";
 import Search from './components/Search.jsx'
 import NavBar from "./components/NavBar.jsx";
+import Footer from "./components/Footer.jsx";
 
 
 function App() {
@@ -17,6 +18,8 @@ function App() {
         <Route path="/search" element={<Search />} />
 
       </Routes>
+      <Footer />
+
     </>
   );
 }

@@ -237,7 +237,7 @@ export default function Search() {
                 ref={mapRef}
                 style={{
                     width: '100%',
-                    height: '80%',
+                    height: '80vh',
                     marginBottom: '20px',
                     borderRadius: '12px',
                     border: '1px solid #ddd',
