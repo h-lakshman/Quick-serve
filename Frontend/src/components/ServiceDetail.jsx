@@ -11,6 +11,9 @@ import {
 } from "@mui/material";
 import AddressCard from "./AddressCard.jsx";
 import ReviewForm from "./ReviewForrm.jsx";
+import { useSelector } from "react-redux";
+import SignInForm from "./SignIn.jsx";
+import SignUpForm from "./SignUp.jsx";
 
 
 export const RatingIcon = ({ rating, onRate }) => {
@@ -54,10 +57,11 @@ const OneService = () => {
     const [service, setService] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [userRating, setUserRating] = useState(1); // Default user rating
     const location = useLocation()
     const route = location.pathname.split('/')
     console.log(route)
+    const isLoginOpen = useSelector((state) => state.reducer.openLoginForm);
+    const isSignupOpen = useSelector((state) => state.reducer.openSignUpForm);
     useEffect(() => {
         const fetchService = async () => {
             try {
@@ -65,7 +69,7 @@ const OneService = () => {
                     `http://127.0.0.1:8000/api/services/${route[2]}/`);
                 const data = await response.json()
                 console.log(data)
-                setService({ ...data, rating: 4 }); // Set default rating for display
+                setService({ ...data, rating: data.average_rating });
             } catch (err) {
                 setError("Failed to fetch service details.");
             } finally {
@@ -95,12 +99,16 @@ const OneService = () => {
                 sx={{
                     display: "flex",
                     maxWidth: "95%",
-                    margin: "20px auto",
                     padding: "16px",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    marginTop: '110px'
+
                 }}
             >
+                {isLoginOpen ? <SignInForm /> : ""
+                }
+                {isSignupOpen ? <SignUpForm /> : ""}
                 <CardMedia
                     component="img"
                     image={

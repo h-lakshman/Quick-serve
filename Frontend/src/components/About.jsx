@@ -1,7 +1,12 @@
 import React from "react";
 import { Box, Typography, Grid, Paper, Divider } from '@mui/material';
+import { useSelector } from "react-redux";
+import SignInForm from "./SignIn";
+import SignUpForm from "./SignUp";
 
 const About = () => {
+    const isLoginOpen = useSelector((state) => state.reducer.openLoginForm);
+    const isSignupOpen = useSelector((state) => state.reducer.openSignUpForm);
     return (
         <>
             <Box
@@ -21,9 +26,13 @@ const About = () => {
                     marginLeft: '0px',
                     top: '10px',
                     width: "100%",
-                    right:'10px'
+                    right: '10px',
+                    marginTop: '100px'
                 }}
             >
+                {isLoginOpen ? <SignInForm /> : ""
+                }
+                {isSignupOpen ? <SignUpForm /> : ""}
                 <Box
                     sx={{
                         position: "absolute",

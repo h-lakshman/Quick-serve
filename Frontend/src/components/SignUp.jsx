@@ -10,6 +10,7 @@ import {
   setPhoneNumber,
 } from "../redux/actions";
 import GoogleButton from "react-google-button";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function SignUpForm() {
   const dispatch = useDispatch();
@@ -51,11 +52,21 @@ export default function SignUpForm() {
     });
 
     const response = await request.json();
-
+    if (!response.ok) {
+      toast.error("Something error happened, Please try again")
+    }
+    else if (response.ok) {
+      handleClose()
+      alert('Account created')
+    }
     console.log(response);
   };
   return (
     <Dialog open={isSignUp} onClose={handleClose}>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
       <DialogContent
         sx={{
           display: "flex",

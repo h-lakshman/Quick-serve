@@ -41,8 +41,18 @@ import {
 } from "../redux/actions.js";
 import SignInForm from "./SignIn";
 import SignUpForm from "./SignUp";
-import { Typography } from "@mui/material";
-
+import { FormControl, MenuItem, Select, Typography } from "@mui/material";
+const categories = [
+  { key: 1, value: "Beauty" },
+  { key: 2, value: "Electricians" },
+  { key: 3, value: "Plumbers" },
+  { key: 4, value: "Caters" },
+  { key: 5, value: "Packers and Movers" },
+  { key: 6, value: "Carpenters" },
+  { key: 7, value: "Mechanics" },
+  { key: 8, value: "Automobile services" },
+  { key: 9, value: "Puncture Works" }
+];
 export default function CreateBusiness() {
   const firstPage = useSelector(
     (state) => state.createBuisnessReducer.firstPage
@@ -66,7 +76,10 @@ export default function CreateBusiness() {
     setAnimationClass("fade-in");
   }, [firstPage, secondPage, thirdPage, fourthPage]);
   return (
-    <div className="main">
+    <div className="main" style={{ marginTop: '110px' }}>
+      {isLoginOpen ? <SignInForm /> : ""
+      }
+      {isSignupOpen ? <SignUpForm /> : ""}
       <div className="buisness-image-div">
         <img
           src={BuisnessDetail}
@@ -522,107 +535,141 @@ function ThirdPage({ className }) {
 
 function FourthPage({ className }) {
   const dispatch = useDispatch();
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
   const category = useSelector((state) => state.createBuisnessReducer.category);
+
+  const buisnessName = useSelector((state) => state.createBuisnessReducer.buisnessName);
+  const buildingName = useSelector((state) => state.createBuisnessReducer.buildingName);
+  const pincode = useSelector((state) => state.createBuisnessReducer.pincode);
+  const city = useSelector((state) => state.createBuisnessReducer.city);
+  const street = useSelector((state) => state.createBuisnessReducer.street);
+  const state = useSelector((state) => state.createBuisnessReducer.state);
+  const area = useSelector((state) => state.createBuisnessReducer.area);
+  const phoneNumber = useSelector((state) => state.createBuisnessReducer.phoneNumber);
+  const daysOpen = useSelector((state) => state.createBuisnessReducer.daysOpen);
+  const openAt = useSelector((state) => state.createBuisnessReducer.openAt);
+  const closeAt = useSelector((state) => state.createBuisnessReducer.closeAt);
+
   const validateForm = () => {
     const newErrors = {};
-
     if (!category) {
-      newErrors.openAt = "This field is required";
+      newErrors.category = "Please select a business category";
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }
-  const buisnessName = useSelector((state) => state.createBuisnessReducer.buisnessName)
-  const buildingName = useSelector((state) => state.createBuisnessReducer.buildingName)
-  const pincode = useSelector((state) => state.createBuisnessReducer.pincode)
-  const city = useSelector((state) => state.createBuisnessReducer.city)
-  const street = useSelector((state) => state.createBuisnessReducer.street)
-  const state = useSelector((state) => state.createBuisnessReducer.state)
-  const area = useSelector((state) => state.createBuisnessReducer.area)
-  const contactPerson = useSelector((state) => state.createBuisnessReducer.contactPerson)
-  const contactEmail = useSelector((state) => state.createBuisnessReducer.contactEmail)
-  const phoneNumber = useSelector((state) => state.createBuisnessReducer.phoneNumber)
-  const adhaar = useSelector((state) => state.createBuisnessReducer.adhaar)
-  const daysOpen = useSelector((state) => state.createBuisnessReducer.daysOpen)
-  const openAt = useSelector((state) => state.createBuisnessReducer.openAt)
-  const closeAt = useSelector((state) => state.createBuisnessReducer.closeAt)
+  };
+
   const successPage = async () => {
     if (validateForm()) {
-      console.log(buildingName, "buildingName")
-      const request = await fetch("http://127.0.0.1:8000/api/services/", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'token': localStorage.getItem('token')
-        },
-        body: JSON.stringify({
-          name: buisnessName,
-          phone_number: phoneNumber,
-          address: {
-            building_name: buildingName,
-            street: street,
-            area: area,
-            city: city,
-            state: state,
-            pincode: pincode,
+      try {
+        const selectedCategory = categories.find(cat => cat.value === category);
+        const categoryKey = selectedCategory ? parseInt(selectedCategory.key) : null;
+
+        const request = await fetch("http://127.0.0.1:8000/api/services/", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'token': localStorage.getItem('token')
           },
-          category: 1,
-          daysavailable: daysOpen,
-          opening_time: openAt,
-          closing_time: closeAt,
-        })
-      });
-      const response = request.json();
-      console.log(response)
-      if (response) {
-        dispatch(buisnessCreated(true))
-        dispatch(setFourthCreatePage(false));
-        dispatch(setSuccessPage(true));
+          body: JSON.stringify({
+            name: buisnessName,
+            phone_number: phoneNumber,
+            address: {
+              building_name: buildingName,
+              street: street,
+              area: area,
+              city: city,
+              state: state,
+              pincode: pincode,
+            },
+            category: categoryKey,
+            daysavailable: {
+              monday: daysOpen.Monday || false,
+              tuesday: daysOpen.Tuesday || false,
+              wednesday: daysOpen.Wednesday || false,
+              thursday: daysOpen.Thursday || false,
+              friday: daysOpen.Friday || false,
+              saturday: daysOpen.Saturday || false,
+              sunday: daysOpen.Sunday || false,
+            },
+            opening_time: openAt,
+            closing_time: closeAt,
+          })
+        });
+
+        // Check if the response is ok (status in the range 200-299)
+        if (!request.ok) {
+          const errorData = await request.json();
+          throw new Error(errorData.message || 'Failed to create business');
+        }
+
+        const response = await request.json();
+
+        // Only dispatch success actions if we have a valid response
+        if (response && response.id) { // Add appropriate check based on your API response
+          dispatch(buisnessCreated(true));
+          dispatch(setFourthCreatePage(false));
+          dispatch(setSuccessPage(true));
+          toast.success("Business created successfully!");
+        } else {
+          throw new Error('Invalid response from server');
+        }
+      } catch (error) {
+        console.error('Error creating business:', error);
+        toast.error(error.message || 'Failed to create business. Please try again.');
+        setErrors({ submit: error.message || 'Failed to create business. Please try again.' });
       }
-
     }
-
   };
+
   return (
     <div className={className}>
-      <h2 style={{ fontFamily: "sans-serif" }}>Add Buisness Category</h2>
+      <h2 style={{ fontFamily: "sans-serif" }}>Add Business Category</h2>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          marginRight: "30px",
-        }}
-      >
-        <div style={{ width: "100%" }}>
-          <InputLabel htmlFor="Search">Type Buisness Category</InputLabel>
-          <OutlinedInput
-            id="Search"
-            startAdornment={
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            }
-            label="Type Buisness Category"
-            sx={{ width: "100%" }}
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        marginRight: "30px",
+        gap: "20px"
+      }}>
+        <FormControl fullWidth error={!!errors.category}>
+          <InputLabel>Select Business Category</InputLabel>
+          <Select
+            value={category || ''}
             onChange={(event) => dispatch(setCategory(event.target.value))}
-          />
-        </div>
+            label="Select Business Category"
+          >
+            {categories.map((cat) => (
+              <MenuItem key={cat.key} value={cat.value}>
+                {cat.value}
+              </MenuItem>
+            ))}
+          </Select>
+          {errors.category && (
+            <Typography color="error" variant="caption">
+              {errors.category}
+            </Typography>
+          )}
+        </FormControl>
+
+        {errors.submit && (
+          <Typography color="error" variant="body2">
+            {errors.submit}
+          </Typography>
+        )}
 
         <Button
           variant="contained"
-          sx={{ marginTop: "20px", backgroundColor: "rgba(215, 22, 22, 1)" }}
+          sx={{ backgroundColor: "rgba(215, 22, 22, 1)" }}
           onClick={successPage}
         >
           Save and Continue
         </Button>
       </div>
+      <Toaster position="top-center" />
     </div>
   );
 }
-
 function SuccesPage({ className }) {
   const navigate = useNavigate();
   const buisnessCreated = useSelector((state) => state.createBuisnessReducer.buisnessCreated)

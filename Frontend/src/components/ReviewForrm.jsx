@@ -1,4 +1,3 @@
-// ReviewForm.js (React Component)
 import React, { useState, useEffect } from "react";
 import { Box, TextField, Button, Typography, Rating, Paper, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -38,16 +37,23 @@ const ReviewForm = () => {
             return;
         }
 
+        // Ensure token is available
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("You must be logged in to submit a review.");
+            return;
+        }
+
         try {
             setLoading(true);
             setError("");
 
             // Submit the new review to the backend
-            await fetch(`http://127.0.0.1:8000/api/services/${slug}/reviews/`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/services/${slug}/reviews/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'token': localStorage.getItem('token'),
+                    'token': token,
                 },
                 body: JSON.stringify({
                     review: reviewText,
@@ -55,16 +61,22 @@ const ReviewForm = () => {
                 }),
             });
 
+            if (!response.ok) {
+                const data = await response.json();
+                setError(data.detail || "Failed to submit review. Please try again.");
+                return;
+            }
+
             // Refresh the reviews
-            const response = await fetch(`http://127.0.0.1:8000/api/services/${slug}/reviews/`, {
+            const reviewResponse = await fetch(`http://127.0.0.1:8000/api/services/${slug}/reviews/`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'token': localStorage.getItem('token'),
+                    'token': token,
                 },
             });
-            const data = await response.json();
-            setReviews(data);
+            const reviewData = await reviewResponse.json();
+            setReviews(reviewData);
 
             // Reset form fields
             setUserRating(0);
