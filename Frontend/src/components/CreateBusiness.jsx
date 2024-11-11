@@ -4,6 +4,7 @@ import BuisnessDetail from "../assets/images/dummy_buisness.jpg";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -35,9 +36,12 @@ import {
   setCloseAt,
   setStreet,
   setSuccessPage,
+  setDaysOpen,
+  buisnessCreated,
 } from "../redux/actions.js";
 import SignInForm from "./SignIn";
 import SignUpForm from "./SignUp";
+import { Typography } from "@mui/material";
 
 export default function CreateBusiness() {
   const firstPage = useSelector(
@@ -86,10 +90,51 @@ export default function CreateBusiness() {
 
 function FirstPage({ className }) {
   const dispatch = useDispatch();
+  const [errors, setErrors] = useState({});
 
+  const buisnessName = useSelector((state) => state.createBuisnessReducer.buisnessName)
+  const buildingName = useSelector((state) => state.createBuisnessReducer.buildingName)
+  const pincode = useSelector((state) => state.createBuisnessReducer.pincode)
+  const city = useSelector((state) => state.createBuisnessReducer.city)
+  const street = useSelector((state) => state.createBuisnessReducer.street)
+  const state = useSelector((state) => state.createBuisnessReducer.state)
+  const area = useSelector((state) => state.createBuisnessReducer.area)
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!buisnessName) {
+      newErrors.buisnessName = "This field is required";
+    }
+    if (!buildingName) {
+      newErrors.buildingName = "This field is required";
+    }
+    if (!street) {
+      newErrors.street = "This field is required";
+    }
+    if (!city) {
+      newErrors.city = "This field is required";
+    }
+    if (!state) {
+      newErrors.state = "This field is required";
+    }
+    if (!pincode) {
+      newErrors.pincode = "This field is required";
+    }
+    if (!area) {
+      newErrors.area = "This field is required";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+
+  }
   const toSecondPage = () => {
-    dispatch(setFirstCreatePage(false));
-    dispatch(setSecondCreatePage(true));
+
+    if (validateForm()) {
+      dispatch(setFirstCreatePage(false));
+      dispatch(setSecondCreatePage(true));
+    }
+
   };
   return (
     <div className={className}>
@@ -108,6 +153,8 @@ function FirstPage({ className }) {
           onChange={(event) => dispatch(setBuisnessName(event.target.value))}
           variant="outlined"
           sx={{ margin: "10px 0" }}
+          error={!!errors.buisnessName}
+          helperText={errors.buisnessName}
         />
         <TextField
           id="pincode"
@@ -116,6 +163,8 @@ function FirstPage({ className }) {
           onChange={(event) => dispatch(setPincode(event.target.value))}
           variant="outlined"
           sx={{ margin: "10px 0" }}
+          error={!!errors.pincode}
+          helperText={errors.pincode}
         />
         <TextField
           id="buildingName"
@@ -124,6 +173,8 @@ function FirstPage({ className }) {
           onChange={(event) => dispatch(setBuildingName(event.target.value))}
           variant="outlined"
           sx={{ margin: "10px 0" }}
+          error={!!errors.buildingName}
+          helperText={errors.buildingName}
         />
         <TextField
           id="street"
@@ -132,6 +183,8 @@ function FirstPage({ className }) {
           label="Street"
           variant="outlined"
           sx={{ margin: "10px 0" }}
+          error={!!errors.street}
+          helperText={errors.street}
         />
         <TextField
           id="area"
@@ -140,6 +193,8 @@ function FirstPage({ className }) {
           onChange={(event) => dispatch(setArea(event.target.value))}
           variant="outlined"
           sx={{ margin: "10px 0" }}
+          error={!!errors.area}
+          helperText={errors.area}
         />
 
         <div
@@ -156,6 +211,8 @@ function FirstPage({ className }) {
             onChange={(event) => dispatch(setCity(event.target.value))}
             variant="outlined"
             sx={{ marginRight: "20px", width: "50%" }}
+            error={!!errors.city}
+            helperText={errors.city}
           />
           <TextField
             id="state"
@@ -164,6 +221,8 @@ function FirstPage({ className }) {
             onChange={(event) => dispatch(setState(event.target.value))}
             variant="outlined"
             sx={{ marginLeft: "20px", width: "50%" }}
+            error={!!errors.state}
+            helperText={errors.state}
           />
         </div>
         <Button
@@ -180,10 +239,36 @@ function FirstPage({ className }) {
 
 function SecondPage({ className }) {
   const dispatch = useDispatch();
+  const [errors, setErrors] = useState({});
+  const contactPerson = useSelector((state) => state.createBuisnessReducer.contactPerson)
+  const contactEmail = useSelector((state) => state.createBuisnessReducer.contactEmail)
+  const phoneNumber = useSelector((state) => state.createBuisnessReducer.phoneNumber)
+  const adhaar = useSelector((state) => state.createBuisnessReducer.adhaar)
+  const validateForm = () => {
+    const newErrors = {};
 
+    if (!contactPerson) {
+      newErrors.contactPerson = "This field is required";
+    }
+    if (!contactEmail) {
+      newErrors.contactEmail = "This field is required";
+    }
+    if (!phoneNumber) {
+      newErrors.phoneNumber = "This field is required";
+    }
+    if (!adhaar) {
+      newErrors.adhaar = "This field is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+
+  }
   const toThirdPage = () => {
-    dispatch(setSecondCreatePage(false));
-    dispatch(setThirdCreatePage(true));
+    if (validateForm()) {
+      dispatch(setSecondCreatePage(false));
+      dispatch(setThirdCreatePage(true));
+    }
   };
   return (
     <div className={className}>
@@ -202,14 +287,18 @@ function SecondPage({ className }) {
           onChange={(event) => dispatch(setContactPerson(event.target.value))}
           variant="outlined"
           sx={{ margin: "10px 0" }}
+          error={!!errors.contactPerson}
+          helperText={errors.contactPerson}
         />
         <TextField
-          id="mobile_number"
+          id="phoneNumber"
           label="Mobile Number"
           required
           onChange={(event) => dispatch(setPhone(event.target.value))}
           variant="outlined"
           sx={{ margin: "10px 0" }}
+          error={!!errors.phoneNumber}
+          helperText={errors.phoneNumber}
         />
         <TextField
           id="email"
@@ -218,6 +307,8 @@ function SecondPage({ className }) {
           onChange={(event) => dispatch(setContactEmail(event.target.value))}
           variant="outlined"
           sx={{ margin: "10px 0" }}
+          error={!!errors.contactEmail}
+          helperText={errors.contactEmail}
         />
         <TextField
           id="adhaar"
@@ -226,6 +317,8 @@ function SecondPage({ className }) {
           onChange={(event) => dispatch(setAdhaar(event.target.value))}
           variant="outlined"
           sx={{ margin: "10px 0" }}
+          error={!!errors.adhaar}
+          helperText={errors.adhaar}
         />
 
         <Button
@@ -251,16 +344,42 @@ function ThirdPage({ className }) {
     Saturday: false,
     Sunday: false,
   });
+  const [errors, setErrors] = useState({});
 
+  const openAt = useSelector((state) => state.createBuisnessReducer.openAt)
+  const closeAt = useSelector((state) => state.createBuisnessReducer.closeAt)
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    const selectedDayCount = Object.values(selectedDays).filter(Boolean).length;
+    if (selectedDayCount === 0) {
+      newErrors.daysOpen = "Please select at least one day of the week.";
+    }
+    if (!openAt) {
+      newErrors.openAt = "This field is required";
+    }
+    if (!closeAt) {
+      newErrors.closeAt = "This field is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+
+  }
   const handleCheckBox = (event) => {
     setSelectedDays({
       ...selectedDays,
       [event.target.name]: event.target.checked,
     });
+    dispatch(setDaysOpen(selectedDays))
   };
   const toFourthPage = () => {
-    dispatch(setThirdCreatePage(false));
-    dispatch(setFourthCreatePage(true));
+    if (validateForm()) {
+      dispatch(setThirdCreatePage(false));
+      dispatch(setFourthCreatePage(true));
+    }
+
   };
   return (
     <div className={className}>
@@ -291,6 +410,11 @@ function ThirdPage({ className }) {
           marginRight: "30px",
         }}
       >
+        {errors.daysOpen && (
+          <Typography color="error" variant="body2" style={{ marginTop: "10px" }}>
+            {errors.daysOpen}
+          </Typography>
+        )}
         <FormGroup>
           <FormControlLabel
             control={
@@ -353,6 +477,7 @@ function ThirdPage({ className }) {
             label="Saturday"
           />
         </FormGroup>
+
         <div
           style={{
             display: "flex",
@@ -366,16 +491,20 @@ function ThirdPage({ className }) {
             label="Open at"
             variant="outlined"
             onChange={() => dispatch(setOpenAt(event.target.value))}
-            helperText="in HH:MM"
             sx={{ marginRight: "20px", width: "50%" }}
+            error={!!errors.openAt}
+            helperText={errors.openAt ? errors.openAt : "in HH:MM"}
+
           />
           <TextField
             id="closeAt"
             label="Close at"
             variant="outlined"
             onChange={() => dispatch(setCloseAt(event.target.value))}
-            helperText="in HH:MM"
             sx={{ marginLeft: "20px", width: "50%" }}
+            error={!!errors.closeAt}
+            helperText={errors.closeAt ? errors.closeAt : "in HH:MM"}
+
           />
         </div>
 
@@ -393,11 +522,67 @@ function ThirdPage({ className }) {
 
 function FourthPage({ className }) {
   const dispatch = useDispatch();
+  const [errors, setErrors] = useState({})
   const category = useSelector((state) => state.createBuisnessReducer.category);
+  const validateForm = () => {
+    const newErrors = {};
 
-  const successPage = () => {
-    dispatch(setFourthCreatePage(false));
-    dispatch(setSuccessPage(true));
+    if (!category) {
+      newErrors.openAt = "This field is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }
+  const buisnessName = useSelector((state) => state.createBuisnessReducer.buisnessName)
+  const buildingName = useSelector((state) => state.createBuisnessReducer.buildingName)
+  const pincode = useSelector((state) => state.createBuisnessReducer.pincode)
+  const city = useSelector((state) => state.createBuisnessReducer.city)
+  const street = useSelector((state) => state.createBuisnessReducer.street)
+  const state = useSelector((state) => state.createBuisnessReducer.state)
+  const area = useSelector((state) => state.createBuisnessReducer.area)
+  const contactPerson = useSelector((state) => state.createBuisnessReducer.contactPerson)
+  const contactEmail = useSelector((state) => state.createBuisnessReducer.contactEmail)
+  const phoneNumber = useSelector((state) => state.createBuisnessReducer.phoneNumber)
+  const adhaar = useSelector((state) => state.createBuisnessReducer.adhaar)
+  const daysOpen = useSelector((state) => state.createBuisnessReducer.daysOpen)
+  const openAt = useSelector((state) => state.createBuisnessReducer.openAt)
+  const closeAt = useSelector((state) => state.createBuisnessReducer.closeAt)
+  const successPage = async () => {
+    if (validateForm()) {
+      console.log(buildingName, "buildingName")
+      const request = await fetch("http://127.0.0.1:8000/api/services/", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: buisnessName,
+          phone_number: phoneNumber,
+          address: {
+            building_name: buildingName,
+            street: street,
+            area: area,
+            city: city,
+            state: state,
+            pincode: pincode,
+          },
+          category: 1,
+          daysavailable: daysOpen,
+          opening_time: openAt,
+          closing_time: closeAt,
+        })
+      });
+      const response = request.json();
+      console.log(response) 
+      if (response) {
+        dispatch(buisnessCreated(true))
+        dispatch(setFourthCreatePage(false));
+        dispatch(setSuccessPage(true));
+      }
+
+    }
+
   };
   return (
     <div className={className}>
@@ -439,6 +624,12 @@ function FourthPage({ className }) {
 
 function SuccesPage({ className }) {
   const navigate = useNavigate();
+  const buisnessCreated = useSelector((state) => state.createBuisnessReducer.buisnessCreated)
+  useEffect(() => {
+    if (buisnessCreated) toast.success("Buisness created successfully!Go to My Buisness for more details")
+
+  }, [buisnessCreated])
+
   return (
     <div
       className={className}
@@ -483,6 +674,10 @@ function SuccesPage({ className }) {
       >
         Go to Home Page
       </Button>
+      <Toaster
+        position="left-center"
+        reverseOrder={false}
+      />
     </div>
   );
 }

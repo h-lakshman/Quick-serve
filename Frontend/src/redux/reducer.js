@@ -1,3 +1,4 @@
+import { buisnessCreated } from "./actions";
 import {
   SET_AREA,
   SET_BUILDING_NAME,
@@ -29,6 +30,7 @@ import {
   SET_SEARCH_CATEGORY,
   SET_SEARCH_LOCATION,
   SET_SEARCH_RESULTS,
+  BUISNESS_CREATED_SUCCESSFULLY,
 } from "./actionTypes";
 
 const initialState = {
@@ -65,6 +67,7 @@ const intialCreateBuisness = {
   openAt: "",
   closeAt: "",
   category: "",
+  buisnessCreated: false,
 };
 
 export const reducer = (state = initialState, action) => {
@@ -138,7 +141,8 @@ export const createBuisnessReducer = (state = intialCreateBuisness, action) => {
       return { ...state, category: action.payload };
     case SET_SUCESS_PAGE:
       return { ...state, successPage: action.payload };
-
+    case BUISNESS_CREATED_SUCCESSFULLY:
+      return { ...state, buisnessCreated: action.payload };
     default:
       return state;
   }

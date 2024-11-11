@@ -28,6 +28,8 @@ import {
   SET_SEARCH_CATEGORY,
   SET_SEARCH_LOCATION,
   SET_SEARCH_RESULTS,
+  BUISNESS_CREATED_SUCCESSFULLY,
+  SET_BUILDING_NAME,
 } from "./actionTypes";
 
 export const setLoginForm = (open) => ({
@@ -96,9 +98,9 @@ export const setPincode = (pincode) => ({
   payload: pincode,
 });
 
-export const setBuildingName = (buisnessName) => ({
-  type: SET_BUISNESS_NAME,
-  payload: buisnessName,
+export const setBuildingName = (buildingName) => ({
+  type: SET_BUILDING_NAME,
+  payload: buildingName,
 });
 
 export const setStreet = (street) => ({
@@ -171,4 +173,9 @@ export const setSearchLocation = (searchLocation) => ({
 export const setSearchResults = (results) => ({
   type: SET_SEARCH_RESULTS,
   payload: results,
+});
+
+export const buisnessCreated = (ok) => ({
+  type: BUISNESS_CREATED_SUCCESSFULLY,
+  payload: ok,
 });
