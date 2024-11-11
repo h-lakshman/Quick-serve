@@ -70,7 +70,7 @@ const Background1 = () => {
           top: "0",
           backgroundRepeat: "no-repeat",
           zIndex: -1,
-          width: "100vw",
+          width: "100%",
           height: "100vh",
         }}
         src="https://s3-media0.fl.yelpcdn.com/educatorphoto/ccPzYQQGD-GXSUadmL3SPw/o.jpg"
@@ -78,8 +78,8 @@ const Background1 = () => {
       />
       <div style={{
         display: "flex", flexDirection: 'column', justifyContent: 'center',
-        alignItems: 'flex-start', height: '100%', width: '100%',
-        marginLeft: '100px'
+        alignItems: 'flex-start', height: '100%', width: '90%',
+        paddingLeft: '100px'
       }}>
         <h1 style={{
           fontFamily: "'Poppins', sans-serif",
@@ -124,7 +124,7 @@ const Background2 = () => {
           top: "0",
           backgroundRepeat: "no-repeat",
           zIndex: -1,
-          width: "100vw",
+          width: "100%",
           height: "100vh",
         }}
         src="https://s3-media0.fl.yelpcdn.com/educatorphoto/qCeYjXM6N03MTsfQF6LREg/o.jpg"
@@ -132,8 +132,8 @@ const Background2 = () => {
       />
       <div style={{
         display: "flex", flexDirection: 'column', justifyContent: 'center',
-        alignItems: 'flex-start', height: '100%', width: '100%',
-        marginLeft: '100px'
+        alignItems: 'flex-start', height: '100%', width: '90%',
+        paddingLeft: '100px'
       }}>
         <h1 style={{
           fontFamily: "'Poppins', sans-serif",
@@ -181,7 +181,7 @@ const Background3 = () => {
           top: "0",
           backgroundRepeat: "no-repeat",
           zIndex: -1,
-          width: "100vw",
+          width: "100%",
           height: "100vh",
         }}
         src='https://static.vecteezy.com/system/resources/previews/010/508/286/non_2x/side-view-of-a-handsome-asian-electrician-repairing-an-electrical-box-with-pliers-in-the-corridor-free-photo.jpg'
@@ -189,8 +189,8 @@ const Background3 = () => {
       />
       <div style={{
         display: "flex", flexDirection: 'column', justifyContent: 'center',
-        alignItems: 'flex-start', height: '100%', width: '100%',
-        marginLeft: '100px'
+        alignItems: 'flex-start', height: '100%', width: '90%',
+        paddingLeft: '100px'
       }}>
         <h1 style={{
           fontFamily: "'Poppins', sans-serif",
@@ -240,7 +240,7 @@ const Background4 = () => {
           top: "0",
           backgroundRepeat: "no-repeat",
           zIndex: -1,
-          width: "100vw",
+          width: "100%",
           height: "100vh",
         }}
         src="https://static.vecteezy.com/system/resources/previews/039/896/808/large_2x/ai-generated-a-plumber-is-fixing-the-drain-in-the-bathroom-generated-by-artificial-intelligence-free-photo.jpg"
@@ -248,8 +248,8 @@ const Background4 = () => {
       />
       <div style={{
         display: "flex", flexDirection: 'column', justifyContent: 'center',
-        alignItems: 'flex-start', height: '100%', width: '100%',
-        marginLeft: '100px'
+        alignItems: 'flex-start', height: '100%', width: '90%',
+        paddingLeft: '100px'
       }}>
         <h1 style={{
           fontFamily: "'Poppins', sans-serif",
@@ -296,7 +296,7 @@ const Background5 = () => {
           top: "0",
           backgroundRepeat: "no-repeat",
           zIndex: -1,
-          width: "100vw",
+          width: "100%",
           height: "100vh",
         }}
         src="https://images.pexels.com/photos/4145354/pexels-photo-4145354.jpeg"
@@ -304,8 +304,8 @@ const Background5 = () => {
       />
       <div style={{
         display: "flex", flexDirection: 'column', justifyContent: 'center',
-        alignItems: 'flex-start', height: '100%', width: '100%',
-        marginLeft: '100px'
+        alignItems: 'flex-start', height: '100%', width: '90%',
+        paddingLeft: '100px'
       }}>
         <h1 style={{
           fontFamily: "'Poppins', sans-serif",
