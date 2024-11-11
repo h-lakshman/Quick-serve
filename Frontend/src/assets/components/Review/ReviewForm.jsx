@@ -26,7 +26,7 @@ const ReviewForm = () => {
 
   // Handle review submission to JSON server
   const handleSubmit = async () => {
-    if (rating === 0 || !reviewText) {
+    if (!reviewText) {
       alert("Please fill in all fields!");
       return;
     }

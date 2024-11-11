@@ -123,9 +123,17 @@ const OneService = () => {
         }}
       />
       <CardContent sx={{ flex: 1 }}>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
         <Typography variant="h4" fontWeight="600" gutterBottom>
           {service.name}
         </Typography>
+        &nbsp;&nbsp;
+            <img
+              src="https://cdn-icons-png.flaticon.com/128/11648/11648438.png"
+              alt="Verified"
+              style={{ width: "20px", height: "20px", marginBottom: "4px" }}
+            /><Typography sx={{fontWeight:'bold'}}>Verified</Typography>
+        </Box>
         <Typography variant="body1" sx={{ fontSize: "18px", fontWeight: 500 }}>
           <RatingIcon rating={service.rating} />
         </Typography>{" "}

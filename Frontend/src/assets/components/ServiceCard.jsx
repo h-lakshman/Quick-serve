@@ -1,6 +1,7 @@
 import React from "react";
-import { Card, CardMedia, CardContent, Typography } from "@mui/material";
+import { Card, CardMedia, CardContent, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import { typography } from "@mui/system";
 
 const RatingIcon = ({ rating }) => {
   const numStars = Math.round(rating || 0);
@@ -66,9 +67,16 @@ const ServiceCard = ({ service }) => {
             padding: "24px",
           }}
         >
-          <Typography variant="h4" fontWeight="600" sx={{ textDecoration: "underline" }}>
-            {service.name}
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography variant="h4" fontWeight="600" sx={{ textDecoration: "underline", marginRight: "8px" }}>
+              {service.name}
+            </Typography>&nbsp;&nbsp;
+            <img
+              src="https://cdn-icons-png.flaticon.com/128/11648/11648438.png"
+              alt="Verified"
+              style={{ width: "20px", height: "20px", marginBottom: "4px" }}
+            /><Typography sx={{fontWeight:'bold'}}>Verified</Typography>
+          </Box>
           <Typography variant="body1" sx={{ fontSize: "19px", fontWeight: 500, mb: 1 }}>
             Phone: <span style={{ fontWeight: "bold", color: "#555" }}>{service.phone_number}</span>
           </Typography>
