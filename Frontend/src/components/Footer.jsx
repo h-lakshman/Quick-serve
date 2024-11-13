@@ -7,6 +7,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import Grid from "@mui/material/Grid";
 import DarkLogo from '../assets/images/darkLogo.png'
+import { Link, useNavigate } from 'react-router-dom'
 
 const FooterLink = ({ children }) => {
     return (
@@ -24,6 +25,7 @@ const FooterLink = ({ children }) => {
 };
 
 const Footer = () => {
+    const navigate = useNavigate();
     return (
         <Box
             sx={{
@@ -44,7 +46,12 @@ const Footer = () => {
                         <FooterLink>Investor Relations</FooterLink>
                         <FooterLink>Media</FooterLink>
                         <FooterLink>We're Hiring</FooterLink>
-                        <FooterLink>Testimonials</FooterLink>
+                        <FooterLink >
+                            <a href="/trust" style={{ textDecoration: 'none', color: 'inherit' }}>
+                                Testimonials
+                            </a>
+
+                        </FooterLink>
                     </Box>
                 </Grid>
 
@@ -94,7 +101,7 @@ const Footer = () => {
 
             <Box textAlign="center" mb={4} sx={{ pt: '20px' }}>
                 <img
-                    src={DarkLogo   }
+                    src={DarkLogo}
                     alt="Your Logo"
                     style={{
                         width: 'auto',
@@ -131,7 +138,7 @@ const Footer = () => {
                     © {new Date().getFullYear()} Quick Serve. All Rights Reserved.
                 </Typography>
             </Box>
-        </Box>
+        </Box >
     );
 };
 

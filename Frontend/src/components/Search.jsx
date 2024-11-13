@@ -8,6 +8,7 @@ import L from 'leaflet';
 import { useSelector } from 'react-redux';
 import SignInForm from './SignIn';
 import SignUpForm from './SignUp';
+import toast, { Toaster } from 'react-hot-toast';
 
 // Fix the Leaflet icon issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -19,7 +20,6 @@ L.Icon.Default.mergeOptions({
 
 const RatingIcon = ({ rating }) => {
     const numStars = Math.round(rating || 0);
-    // Wrap stars in a span instead of div to fix DOM nesting issue
     return (
         <span style={{ display: "inline-flex", alignItems: "center" }}>
             {[...Array(5)].map((_, index) => (
@@ -116,10 +116,16 @@ export default function Search() {
     const route = useLocation();
     const data = route.state;
     const { results = [], category = '', location = '', lattitude, longtitude } = data || {};
-
+    const isAuthenticated = useSelector((state) => state.reducer.isAuthenticated)
     const mapRef = useRef(null);
     const [mapInstance, setMapInstance] = useState(null);
     const markersLayerRef = useRef(null);
+    useEffect(() => {
+        if (!isAuthenticated) {
+            const desired = data.desired
+            toast.error("Unfortunately, we couldn't find any services available in your location right now. However, we've listed nearby areas where these services might be available. Feel free to explore those options!")
+        }
+    }, [])
 
     // Initialize map
     useEffect(() => {
@@ -193,7 +199,6 @@ export default function Search() {
             markersLayerRef.current.clearLayers();
         };
     }, [results, mapInstance, lattitude, longtitude]);
-    const isAuthenticated = useSelector((state) => state.reducer.isAuthenticated);
     const isLoginOpen = useSelector((state) => state.reducer.openLoginForm);
     const isSignupOpen = useSelector((state) => state.reducer.openSignUpForm);
     return (
@@ -201,6 +206,10 @@ export default function Search() {
             {isLoginOpen ? <SignInForm /> : ""
             }
             {isSignupOpen ? <SignUpForm /> : ""}
+            <Toaster
+                position="left-center"
+                reverseOrder={false}
+            />
             <Box sx={{ flex: '2', padding: '20px', overflow: 'auto' }}>
                 <div style={{
                     fontFamily: "'Open Sans', sans-serif",

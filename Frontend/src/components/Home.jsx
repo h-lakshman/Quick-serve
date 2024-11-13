@@ -22,13 +22,13 @@ export default function Home() {
 
   const services = [{
     name: 'Plumbers',
-    description: 'Fixing Leaks,Building Trust',
-    src: "https://as1.ftcdn.net/v2/jpg/08/29/25/70/1000_F_829257050_JKVmoRjGdWRKnfdN3amtBQhsrBAl7k9D.jpg"
+    description: 'Fixing Leaks, Building Trust',
+    src: "https://static.vecteezy.com/system/resources/previews/039/896/808/large_2x/ai-generated-a-plumber-is-fixing-the-drain-in-the-bathroom-generated-by-artificial-intelligence-free-photo.jpg"
 
   }, {
-    name: 'Packers and Movers',
+    name: 'Home Services',
     description: 'Dial up the comfort',
-    src: "https://s3-media0.fl.yelpcdn.com/educatorphoto/qCeYjXM6N03MTsfQF6LREg/o.jpg"
+    src: "https://images.pexels.com/photos/7464491/pexels-photo-7464491.jpeg"
 
   }, {
     name: 'Home Cleaners',
@@ -37,11 +37,11 @@ export default function Home() {
   }, {
     name: 'Home Tutors',
     description: 'Where Learning Meets Excellence, Right at Home!',
-    src: "https://static.vecteezy.com/system/resources/previews/039/896/808/large_2x/ai-generated-a-plumber-is-fixing-the-drain-in-the-bathroom-generated-by-artificial-intelligence-free-photo.jpg"
+    src: "https://images.pexels.com/photos/5303660/pexels-photo-5303660.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
   }, {
     name: 'Electricians',
     description: 'Powering Your Home,One Connection at a Time!',
-    src: "https://images.pexels.com/photos/8488061/pexels-photo-8488061.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+    src: "https://images.pexels.com/photos/8853525/pexels-photo-8853525.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
   }];
 
   const progressCircle = useRef(null);

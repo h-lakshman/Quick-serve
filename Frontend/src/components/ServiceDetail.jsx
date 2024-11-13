@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import {
     Card,
     CardMedia,
@@ -264,10 +264,50 @@ const OneService = () => {
                 </Box>
             </Card>
             <AddressCard service={service} /><br />
+            <TrustMessage />
             <ReviewForm />
         </>
 
     );
 };
 
-export default OneService;  
+export default OneService;
+
+
+import { IconButton } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
+
+function TrustMessage() {
+    return (
+        <Box
+            sx={{
+                backgroundColor: '#e3f2fd', // Light blue background
+                color: '#0d47a1', // Dark blue text color for contrast
+                padding: '16px',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                boxShadow: 1, // Subtle shadow for depth
+                justifyContent: 'space-between', // Space between icon and text
+            }}
+        >
+            {/* Icon */}
+            <IconButton sx={{ color: '#0d47a1' }}>
+                <InfoIcon />
+            </IconButton>
+
+            {/* Text content */}
+            <Box sx={{ flexGrow: 1, marginLeft: '8px' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                    Your trust is our top concern
+                </Typography>
+                <Typography variant="body2" sx={{ marginTop: '4px' }}>
+                    So businesses can't pay to alter or remove their reviews.
+                </Typography>
+                <a href="/about-us" sx={{ marginTop: '8px', color: '#0d47a1', textDecoration: 'underline' }}>
+                    Learn more about reviews
+                </a>
+            </Box>
+        </Box>
+    );
+}

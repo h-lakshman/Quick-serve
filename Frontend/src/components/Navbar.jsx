@@ -17,7 +17,7 @@ export default function NavBar() {
     const url = useLocation();
     const path = url.pathname;
     let theme = 'white';
-    const routes = ['create-buisness', 'search', 'about-us', 'services'];
+    const routes = ['create-buisness', 'search', 'about-us', 'services', 'my-business', 'directions', 'trust'];
     for (let route of routes) {
         if (path.includes(route)) {
             theme = 'black';
@@ -115,8 +115,9 @@ export default function NavBar() {
             const response = await request.json();
             console.log(response);
             const data = {
-                results: response, category: searchCategory,
-                location: searchLocation, longtitude: longtitude, lattitude: lattitude
+                results: response.results, category: searchCategory,
+                location: searchLocation, longtitude: longtitude, lattitude: lattitude,
+                desired: response.desired,
             };
             navigate('/search', { state: data });
             return;
@@ -131,14 +132,14 @@ export default function NavBar() {
             zIndex: 2, position: 'fixed', width: '100%', display: 'flex', alignItems: 'center',
             justifyContent: 'space-between'
         }}>
-            <div className='logo-search'>
+            <div className='logo-search' >
                 <a href='/' style={{ height: '100%' }}>
                     <img className='logo' src={theme === 'white' ? Logo : darkLogo} alt="Quick Serve"
                         width="220px" height="70px" style={{
                             top: 3, zIndex: 2,
                         }} />
                 </a>
-                <div className='search-item-fields' style={{ zIndex: '1' }}>
+                <div className='search-item-fields' style={{ zIndex: '1', marginTop: '10px' }}>
                     <div className='search-box-left'>
                         {/* Autocomplete for category search */}
                         <Autocomplete
@@ -181,7 +182,7 @@ export default function NavBar() {
                     </div>
                 </div>
 
-                <div className='search-icon-div' onClick={searchSubmit} style={{ zIndex: '1' }}>
+                <div className='search-icon-div' onClick={searchSubmit} style={{ zIndex: '1', marginTop: '10px' }}>
                     <div className='search-icon' >
                         <img width="25" height="25" className='seach-image' src="https://img.icons8.com/ios-filled/50/FFFFFF/search--v1.png" alt="search--v1" />
                     </div>
@@ -197,7 +198,7 @@ function TextButtons() {
     const url = useLocation();
     const path = url.pathname;
     let theme = 'white';
-    const routes = ['create-buisness', 'search', 'about-us', 'services'];
+    const routes = ['create-buisness', 'search', 'about-us', 'services', 'my-business', 'directions', 'trust'];
     for (let route of routes) {
         if (path.includes(route)) {
             theme = 'black';
@@ -225,7 +226,8 @@ function TextButtons() {
     return (
         <Stack direction="row" spacing={2} style={{
             zIndex: '1', display: 'flex',
-            alignItems: 'center', height: '100%'
+            alignItems: 'center', height: '100%',
+            justifyContent: 'center'
         }}>
             <div>
                 <Button
@@ -239,14 +241,14 @@ function TextButtons() {
                         fontWeight: '740',
                         lineHeight: '18px',
                         width: '100px',
-                        height: '73%',
                         padding: '0px 5px',
+                        top: isAuthenticated ? '4px' : '1px',
                         ":hover": theme === 'white' ? {
                             backgroundColor: 'rgba(255, 255, 255, 0.368)',
                         } : {
                             backgroundColor: 'rgba(45, 46, 47, 0.368)',
                         }
-                    }}> <p>About us</p></Button>
+                    }}> <p >About us</p></Button>
             </div>
 
             {!isAuthenticated ? <div>
@@ -305,6 +307,26 @@ function TextButtons() {
                             backgroundColor: 'rgba(45, 46, 47, 0.368)',
                         }
                     }}><p>List Buisness </p></Button>
+                <Button
+                    onClick={() => navigate('/my-business')}
+                    sx={{
+                        color: theme === 'white' ? 'rgba(255, 255, 255, 1)' : 'rgba(45, 46, 47, 1)',
+                        backgroundColor: 'transparent',
+                        border: '1px solid transparent',
+                        fontFamily: 'Poppins, Helvetica Neue, Helvetica, Arial, sans-serif',
+                        fontSize: '15px',
+                        fontWeight: '740',
+                        lineHeight: '18px',
+                        width: '150px',
+                        height: '73%',
+                        padding: '0px 5px',
+                        marginRight: "10px",
+                        ":hover": theme === 'white' ? {
+                            backgroundColor: 'rgba(255, 255, 255, 0.368)',
+                        } : {
+                            backgroundColor: 'rgba(45, 46, 47, 0.368)',
+                        }
+                    }}><p>My Business</p></Button>
                 <Button
                     onClick={handleSignOut}
                     sx={{

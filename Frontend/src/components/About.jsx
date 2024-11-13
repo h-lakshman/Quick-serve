@@ -27,7 +27,7 @@ const About = () => {
                     top: '10px',
                     width: "100%",
                     right: '10px',
-                    marginTop: '100px'
+                    marginTop: '80px'
                 }}
             >
                 {isLoginOpen ? <SignInForm /> : ""
