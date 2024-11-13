@@ -12,5 +12,6 @@ router.register(
 router.register('categories', views.CategoryViewSet, basename='categories')
 
 urlpatterns = router.urls + [
-    path('search/', views.search, name='search')
+    path('search/', views.search, name='search'),
+    path('my-business/', views.my_buisness, name='my-business')
 ]

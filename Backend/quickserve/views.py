@@ -1,11 +1,8 @@
 from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.request import HttpRequest
 from rest_framework.decorators import api_view
 from rest_framework.decorators import action
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 from .models import Service, Review, User, Category
 from .serializers import ServiceSerializer, ReviewSerializer, CategorySerializer
 from rest_framework.exceptions import ValidationError
@@ -18,7 +15,7 @@ from rest_framework.exceptions import ValidationError
 from .models import Service, Review, User
 from .serializers import ReviewSerializer
 
-
+from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -89,7 +86,7 @@ def search(request):
     location = request.GET.get('find_loc', default='')
     category_name = request.GET.get('find_desc', default='')
     queryset = Service.objects.all()
-
+    desired = True
     if not category_name and not location:
         return Response({
             'detail': 'Please provide at least one search parameter: category (find_desc) or location (find_loc).'
@@ -107,6 +104,7 @@ def search(request):
         )
 
     if not queryset.exists():
+        desired = False
         if category_name:
             queryset = Service.objects.filter(
                 category__name__icontains=category_name)
@@ -114,12 +112,48 @@ def search(request):
         if not queryset.exists():
             return Response({
                 'detail': 'No services found matching your search criteria.',
+                'desired': desired,
             }, status=404)
 
     serializer = ServiceSerializer(queryset, many=True)
-    return Response(serializer.data, status=200)
+    return Response({
+        "results": serializer.data,
+        "desired": desired
+    }, status=200)
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+@api_view(['GET'])
+def my_buisness(request):
+    if request.method == "GET":
+        token = request.headers.get('token')
+        if not token:
+            return Response({'detail': 'Token is required.'}, status=400)
+
+        try:
+            access_token = AccessToken(token)
+        except TokenError as e:
+            return Response({'detail': f'Invalid token: {str(e)}'}, status=400)
+
+        user_id = access_token.payload.get('user_id')
+
+        if not user_id:
+            return Response(
+                {'detail': 'Invalid token - no user_id found.'}, status=400)
+
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({'detail': 'User not found.'}, status=400)
+
+        services = Service.objects.filter(user=user)
+
+        if not services:
+            return Response({'detail': 'No services found for this user.'}, status=404)
+
+        service_serializer = ServiceSerializer(services, many=True)
+        return Response({'services': service_serializer.data}, status=200)

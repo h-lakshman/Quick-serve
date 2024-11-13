@@ -1,7 +1,9 @@
 from rest_framework import serializers
-from .models import Service, Category, DaysAvailable, Address, Review
+from .models import Service, Category, DaysAvailable, Address, Review, User
 from django.db.models import Avg
 from django.db import transaction
+from rest_framework.exceptions import ValidationError
+from rest_framework_simplejwt.tokens import AccessToken
 
 
 class DaysOpenSerializer(serializers.ModelSerializer):
@@ -48,6 +50,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all())
     average_rating = serializers.SerializerMethodField(read_only=True)
+    slug = serializers.SlugField(read_only=True)
 
     class Meta:
         model = Service
@@ -62,7 +65,29 @@ class ServiceSerializer(serializers.ModelSerializer):
             return round(avg_rating, 1)
         return None
 
+    def get_user_from_token(self, token):
+        try:
+            access_token = AccessToken(token)
+            user_id = access_token.payload.get('user_id')
+            if not user_id:
+                raise ValidationError('Invalid token - no user_id found.')
+
+            user = User.objects.get(id=user_id)
+            return user
+        except Exception as e:
+            raise ValidationError(f'Error processing token: {str(e)}')
+
     def create(self, validated_data):
+        request = self.context.get('request')
+        if not request:
+            raise ValidationError('Request context is required')
+
+        token = request.headers.get('token')
+        if not token:
+            raise ValidationError('Token is required')
+
+        user = self.get_user_from_token(token)
+
         address_data = validated_data['address']
         address = Address(
             building_name=address_data.get('building_name', None),
@@ -74,6 +99,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         )
         address.save()
         service = Service(
+            user=user,
             name=validated_data['name'],
             phone_number=validated_data['phone_number'],
             category=validated_data['category'],

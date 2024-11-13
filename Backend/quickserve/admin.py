@@ -7,3 +7,6 @@ admin.site.register(Category)
 admin.site.register(DaysAvailable)
 admin.site.register(Address)
 admin.site.register(Review)
+
+
+
